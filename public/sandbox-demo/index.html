@@ -33,9 +33,9 @@ tailwind.config={theme:{extend:{fontFamily:{sans:['"DM Sans"',"sans-serif"]},col
 
 <div id="root"></div>
 
-<script src="scenario.js?v=1a2df585e8"></script>
+<script src="scenario.js?v=e00d1028f6"></script>
 <script>
-const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search).has("embed");const state={view:"app",stage:0,briefTab:"org",briefSeen:["org"],tableName:"Table 4",ceoRead:"",clinicTicket:"available",clinicTime:null,profile:null,processPicks:[...SITUATION_ANSWER],openStage:"p2",stageWhy:{},situationCheck:null,situationConfirmed:false,situationStatement:null,shortlist:[],customCases:[],suggestionsShown:false,ownBeforeSuggestions:null,ideaStep:0,ideaDir:"fwd",stanceWhy:"",pickWhy:{},briefCheck:{},weights:{impact:25,feasibility:25,adoption:25,data:25},scores:{},chosen:null,rejection:"",priorStep:"stance",scoreIdx:0,owner:null,dataScopes:[],integration:null,buildNote:"",showTech:false,mapNodes:[],mapBuilt:false,libOpen:false,libTab:"input",mapWhy:[],mapVerdict:null,mapDecline:"",buildEdit:false,scrollTo:null,rollout:{},accountable:null,successMetrics:[],risks:[],pilotScope:null,pilotWho:"",pilotDuration:null,killCriterion:"",clinicOpen:false,pitchHeadline:"",pitchEdits:{},pitchHidden:[],pitchOrder:["situation","usecase","why","workflow","deploy","test","risks","ask"],slide:0,example:null,secondsLeft:2*60*60};const $=s=>document.querySelector(s);const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);const byId=(arr,id)=>arr.find(x=>x.id===id);const toggle=(arr,v)=>arr.includes(v)?arr.filter(x=>x!==v):[...arr,v];const allCases=()=>[...USE_CASES,...state.customCases];function fmtTime(s){const h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;return`${h}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`}function focusStages(){return state.processPicks.map(id=>byId(PROCESS.stages,id)).filter(Boolean)}function draftSituation(){const names=state.processPicks.map(id=>byId(PROCESS.stages,id).name);const hrs=state.processPicks.reduce((a,id)=>a+byId(PROCESS.stages,id).hours,0);if(!names.length)return"";return`Of the ${PROCESS.totalHours} hours NordWeave spends on every employee, every cycle, ${hrs} sit in ${names.join(" and ")}. That is where this cycle is losing.`}function casesForStage(pid){return USE_CASES.filter(u=>u.stage===pid)}function briefFeedback(u){if(!u)return null;const txt=((u.name||"")+" "+(u.does||"")+" "+(u.doesNot||"")).toLowerCase();const stance=state.profile?byId(STANCES,state.profile):null;const stg=u.stage?byId(PROCESS.stages,u.stage):null;const hit=(...ws)=>ws.some(w=>txt.includes(w));const notes=[];if(hit("rating","rate","score","rank","assess","evaluat","promot","calibrat","decide","recommend")){notes.push({tone:"risk",head:"This lands inside Annex III",body:"You have it touching evaluation or ranking. Under the EU AI Act that is high risk for this process, which means a conformity assessment, logging, and a human who can actually overrule it rather than rubber-stamp it. Build that in now or the works council will build it for you."})}else{notes.push({tone:"ok",head:"Outside the high-risk boundary, for now",body:"As written it supports the humans rather than scoring anyone, which keeps it clear of Annex III. The moment it suggests a rating, that changes. Say so explicitly in your pitch: it is the strongest line you have with a works council."})}if(hit("note","record","transcri","capture","log","monitor","track","listen","conversation","1:1","check-in")){notes.push({tone:"risk",head:"Germany, the Netherlands and France will want a say",body:"Capturing what is said between a manager and an employee is exactly what the works councils consult on. Eight weeks minimum, and the 2025 time-tracking pilot took eleven and came back with conditions on retention and access. Put the consultation in your timeline, not after it."})}if(hit("replace","new system","platform","hris","successfactors","workday","migrat")){notes.push({tone:"risk",head:"Check this against the no-replacement rule",body:"Replacing SuccessFactors is off the table, and that programme has been shelved twice already. If this needs a new system of record rather than sitting beside the ones they have, it is dead before it is funded."})}if(hit("teams","meeting","calendar","schedul","chat")){notes.push({tone:"ok",head:"It meets people where they already are",body:"The one-to-ones happen in Microsoft Teams, which is unmanaged but universal. Anything living there starts with a distribution advantage that a new destination does not have. That is a real answer to the 23% Copilot problem."})}else{notes.push({tone:"watch",head:"Where does a manager actually meet this?",body:"Four hundred Copilot licences went out in March and 23% have been opened. Access is not adoption here. If this is another place to go rather than something that appears inside Teams, assume the same fate."})}if(hit("write","draft","summar","text","note","transcri","prompt","question")){notes.push({tone:"watch",head:"Six languages, not one",body:"Anything that reads or writes natural language has to work in six. A pilot in English will look fine and prove very little, because the Dutch and German sites are where the works councils are."})}if(stg){notes.push({tone:"ok",head:`Aimed at stage ${stg.n}, which is ${stg.hours} of the ${PROCESS.totalHours} hours`,body:`${stg.leak} If this works, that is the sentence that should stop being true. Be able to say how you would know.`})}if(stance){const big=stance.id==="bigbet",safe=stance.id==="safety";const narrow=hit("prompt","remind","nudge","suggest","flag","surface");if(big&&narrow){notes.push({tone:"watch",head:"This looks smaller than the stance you declared",body:"You called yourselves a big bet: fix what everything else is downstream of. As written this nudges behaviour rather than changing the shape of the cycle. Either the idea grows or the stance does not survive the pitch."})}else if(safe&&hit("automat","draft","generat","decide")){notes.push({tone:"watch",head:"Safety-first, but this one writes",body:"You chose the stance that starts where an error is survivable. Anything generating text about a named employee is the opposite of that. Either narrow what it produces, or be ready to explain the gap."})}else{notes.push({tone:"ok",head:`Consistent with ${stance.name.toLowerCase()}`,body:`${stance.creed} On the face of it this idea and that posture are telling the same story, which is what the room will check first.`})}}if(!(u.doesNot||"").trim()){notes.push({tone:"watch",head:"You have not said what it will not do",body:"In a process that decides pay and promotion, the boundary is the part that gets scrutinised. A use case with no stated limit reads as unbounded, and unbounded is what a works council refuses."})}return{notes,when:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}}function briefFeedbackPanel(pid){const fb=state.briefCheck[pid];const u=pickForStage(pid);if(!u)return"";if(!fb)return`<div class="mt-3 p-4 rounded-xl border border-dashed border-lavd/60 bg-lav/10 flex items-center gap-3 flex-wrap">
+const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search).has("embed");const state={view:"app",stage:0,briefSlide:0,briefMax:0,introSeen:[],stanceSlide:0,mapProposed:[],matrixOpen:null,buildStep:0,deployStep:0,buildActive:null,buildSaved:{},pilot:{},forward:[],priorityOrder:[],tableName:"Table 4",ceoRead:"",clinicTicket:"available",clinicTime:null,profile:null,processPicks:[...SITUATION_ANSWER],openStage:"p2",stageWhy:{},situationCheck:null,situationConfirmed:false,situationStatement:null,shortlist:[],customCases:[],suggestionsShown:false,ownBeforeSuggestions:null,ideaStep:0,ideaDir:"fwd",stanceWhy:"",pickWhy:{},briefCheck:{},weights:{impact:25,feasibility:25,adoption:25,data:25},scores:{},chosen:null,rejection:"",priorStep:"stance",scoreIdx:0,owner:null,dataScopes:[],integration:null,buildNote:"",showTech:false,mapNodes:[],mapBuilt:false,libOpen:false,libTab:"input",mapWhy:[],mapVerdict:null,mapDecline:"",buildEdit:false,scrollTo:null,rollout:{},accountable:null,successMetrics:[],risks:[],pilotScope:null,pilotWho:"",pilotDuration:null,killCriterion:"",clinicOpen:false,pitchHeadline:"",pitchEdits:{},pitchHidden:[],pitchOrder:["situation","stance","why","risks"],slide:0,example:null,secondsLeft:2*60*60};const $=s=>document.querySelector(s);const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);const byId=(arr,id)=>arr.find(x=>x.id===id);const toggle=(arr,v)=>arr.includes(v)?arr.filter(x=>x!==v):[...arr,v];const allCases=()=>[...USE_CASES,...state.customCases];function fmtTime(s){const h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60;return`${h}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`}function focusStages(){return state.processPicks.map(id=>byId(PROCESS.stages,id)).filter(Boolean)}function draftSituation(){const names=state.processPicks.map(id=>byId(PROCESS.stages,id).name);const hrs=state.processPicks.reduce((a,id)=>a+byId(PROCESS.stages,id).hours,0);if(!names.length)return"";return`Of the ${PROCESS.totalHours} hours NordWeave spends on every employee, every cycle, ${hrs} sit in ${names.join(" and ")}. That is where this cycle is losing.`}function casesForStage(pid){return USE_CASES.filter(u=>u.stage===pid)}function briefFeedback(u){if(!u)return null;const txt=((u.name||"")+" "+(u.does||"")+" "+(u.doesNot||"")).toLowerCase();const stance=state.profile?byId(STANCES,state.profile):null;const stg=u.stage?byId(PROCESS.stages,u.stage):null;const hit=(...ws)=>ws.some(w=>txt.includes(w));const notes=[];if(hit("rating","rate","score","rank","assess","evaluat","promot","calibrat","decide","recommend")){notes.push({tone:"risk",head:"This lands inside Annex III",body:"You have it touching evaluation or ranking. Under the EU AI Act that is high risk for this process, which means a conformity assessment, logging, and a human who can actually overrule it rather than rubber-stamp it. Build that in now or the works council will build it for you."})}else{notes.push({tone:"ok",head:"Outside the high-risk boundary, for now",body:"As written it supports the humans rather than scoring anyone, which keeps it clear of Annex III. The moment it suggests a rating, that changes. Say so explicitly in your pitch: it is the strongest line you have with a works council."})}if(hit("note","record","transcri","capture","log","monitor","track","listen","conversation","1:1","check-in")){notes.push({tone:"risk",head:"Germany, the Netherlands, France and Italy will want a say",body:"Capturing what is said between a manager and an employee is exactly what the works councils consult on. Eight weeks minimum, and the 2025 time-tracking pilot took eleven and came back with conditions on retention and access. Put the consultation in your timeline, not after it."})}if(hit("replace","new system","platform","hris","successfactors","workday","migrat")){notes.push({tone:"risk",head:"Check this against the no-replacement rule",body:"Replacing SuccessFactors is off the table, and that programme has been shelved twice already. If this needs a new system of record rather than sitting beside the ones they have, it is dead before it is funded."})}if(hit("teams","meeting","calendar","schedul","chat")){notes.push({tone:"ok",head:"It meets people where they already are",body:"The one-to-ones happen in Microsoft Teams, which is unmanaged but universal. Anything living there starts with a distribution advantage that a new destination does not have. That is a real answer to the 23% Copilot problem."})}else{notes.push({tone:"watch",head:"Where does a manager actually meet this?",body:"Four hundred Copilot licences went out in March and 23% have been opened. Access is not adoption here. If this is another place to go rather than something that appears inside Teams, assume the same fate."})}if(hit("write","draft","summar","text","note","transcri","prompt","question")){notes.push({tone:"watch",head:"Six languages, not one",body:"Anything that reads or writes natural language has to work in six. A pilot in English will look fine and prove very little, because the Dutch and German sites are where the works councils are."})}if(stg){notes.push({tone:"ok",head:`Aimed at stage ${stg.n}, which is ${stg.hours} of the ${PROCESS.totalHours} hours`,body:`${stg.leak} If this works, that is the sentence that should stop being true. Be able to say how you would know.`})}if(stance){const big=stance.id==="bigbet",safe=stance.id==="safety";const narrow=hit("prompt","remind","nudge","suggest","flag","surface");if(big&&narrow){notes.push({tone:"watch",head:"This looks smaller than the stance you declared",body:"You called yourselves a big bet: fix what everything else is downstream of. As written this nudges behaviour rather than changing the shape of the cycle. Either the idea grows or the stance does not survive the pitch."})}else if(safe&&hit("automat","draft","generat","decide")){notes.push({tone:"watch",head:"Safety-first, but this one writes",body:"You chose the stance that starts where an error is survivable. Anything generating text about a named employee is the opposite of that. Either narrow what it produces, or be ready to explain the gap."})}else{notes.push({tone:"ok",head:`Consistent with ${stance.name.toLowerCase()}`,body:`${stance.creed} On the face of it this idea and that posture are telling the same story, which is what the room will check first.`})}}if(!(u.doesNot||"").trim()){notes.push({tone:"watch",head:"You have not said what it will not do",body:"In a process that decides pay and promotion, the boundary is the part that gets scrutinised. A use case with no stated limit reads as unbounded, and unbounded is what a works council refuses."})}return{notes,when:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}}function briefFeedbackPanel(pid){const fb=state.briefCheck[pid];const u=pickForStage(pid);if(!u)return"";if(!fb)return`<div class="mt-3 p-4 rounded-xl border border-dashed border-lavd/60 bg-lav/10 flex items-center gap-3 flex-wrap">
     <span class="flex-1 min-w-[220px]">
       <span class="block text-[13px] font-bold text-ink leading-snug">Read it back against NordWeave</span>
       <span class="block text-[12px] text-muted leading-snug mt-0.5">The platform holds the brief. It will tell you what this idea runs into at this company, not what a textbook says about AI.</span>
@@ -56,19 +56,13 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
           <div class="text-[13px] text-body leading-relaxed">${n.body}</div>
         </div>`}).join("")}
     </div>
-  </div>`}function stageSettled(pid){const u=pickForStage(pid);if(!u)return false;return true}function pickForStage(pid){return state.shortlist.map(id=>allCases().find(u=>u.id===id)).find(u=>u&&u.stage===pid)||null}function fillScores(){shortlistCases().forEach(u=>{const sc=state.scores[u.id]||{};state.scores[u.id]=Object.fromEntries(CRITERIA.map(c=>[c.id,sc[c.id]||3]))})}function fillSkipped(target){if(target>=4)focusStages().forEach(f=>{if(pickForStage(f.id))return;const first=allCases().find(u=>u.stage===f.id&&!u.isCustom);if(first)state.shortlist.push(first.id)});if(target>=5){fillScores();if(!state.chosen){const ranked=shortlistCases().sort((a,b)=>weightedScore(b.id)-weightedScore(a.id));if(ranked.length)state.chosen=ranked[0].id}}}function weightedScore(ucId){const s=state.scores[ucId];if(!s)return 0;const w=state.weights,tot=w.impact+w.feasibility+w.adoption+w.data||1;return(s.impact*w.impact+s.feasibility*w.feasibility+s.adoption*w.adoption+s.data*w.data)/tot}function deployTraps(){const t=[],lane=id=>state.rollout[id],order={t1:0,t2:1,t3:2};if(lane("r9")==="t1")t.push(TRAPS.scaleEarly);if(lane("r1")&&lane("r2")&&order[lane("r2")]>order[lane("r1")])t.push(TRAPS.councilLate);if(lane("r1")&&lane("r3")&&order[lane("r3")]>order[lane("r1")])t.push(TRAPS.dpiaLate);if(lane("r1")&&!lane("r8"))t.push(TRAPS.noBaseline);if(Object.keys(state.rollout).length&&!lane("r10"))t.push(TRAPS.noDecision);if(!state.killCriterion.trim())t.push(TRAPS.noKill);return t}function scorecard(){const out=[];const focus=focusStages();const chosen=state.chosen?allCases().find(u=>u.id===state.chosen):null;{let v=.2;const n=[];if(state.situationAttempts===1){v+=.25;n.push("you read the process correctly first time, without being walked to it")}else if(state.situationAttempts===2){v+=.15;n.push("it took you two looks to find where the process was losing, which is a fair read of a messy picture")}else if(state.situationAttempts>2)n.push(`it took ${state.situationAttempts} attempts to locate the losses, so spend longer in the evidence next time before committing`);if(focus.length){v+=.15;n.push(`and committed to ${focus.map(f=>f.name).join(" and ")}`)}if(state.situationStatement!==null&&state.situationStatement.trim()){v+=.25;n.push("you then wrote the situation in your own words rather than taking our draft")}else n.push("but you left our draft statement untouched, so we can see where you think the problem sits and not what you think it is");out.push({id:"framing",strength:v,note:n.length?cap(n.join("; "))+".":"Not enough of the diagnosis was done to say anything useful."})}{let v=.4;const n=[];const inFocus=chosen&&!chosen.isCustom&&state.processPicks.includes(chosen.stage);if(inFocus){v=1;n.push(`“${chosen.name}” sits in ${byId(PROCESS.stages,chosen.stage).name}, one of the two stages you said were the problem`)}else if(chosen&&chosen.isCustom){v=.8;n.push("you wrote your own use case rather than taking one off the shelf, which usually means you had something specific in mind")}else if(chosen){v=.3;n.push(`“${chosen.name}” sits in ${byId(PROCESS.stages,chosen.stage).name}, which is not one of the two stages you identified — it may be a good idea, but it is not the problem you diagnosed`)}const own=state.customCases.filter(c=>c.name.trim()&&state.shortlist.includes(c.id)).length;if(own){v=Math.min(1,v+.15);n.push(`${own} of your two is your own rather than one of ours`)}if(state.ownBeforeSuggestions)n.push("and you had written something before opening our suggestions, which is the harder way round");out.push({id:"fit",strength:v,note:n.length?cap(n.join("; "))+".":"No use case was selected."})}{let v=.2;const n=[];if(state.shortlist.length===2){v+=.2;n.push("you put one answer against each of your two stages rather than settling on a favourite early")}if(state.profile){v+=.2;n.push(`you declared a stance (${byId(PRIORITY_PROFILES,state.profile).name.toLowerCase()}) rather than scoring blind`)}const ranked=state.shortlist.map(id=>({id,v:weightedScore(id)})).sort((a,b)=>b.v-a.v);if(ranked.length&&state.chosen===ranked[0].id){v+=.2;n.push("your choice matches your own weighting, so the scoring meant something")}else if(ranked.length&&state.chosen)n.push("your choice is not the top option under your own weights, which can be right but needs saying out loud in the pitch");if(state.rejection.trim().length>=25){v+=.2;n.push("you said what you turned down and why")}else n.push("the rejection rationale is thin, and what you decided not to do is half the decision");out.push({id:"prioritisation",strength:v,note:cap(n.join("; "))+"."})}{let v=.1;const n=[];if(state.mapBuilt){v+=.2;n.push(`you laid out ${state.mapNodes.length} steps end to end`);if(state.mapNodes.some(x=>NODE_MAP[x.nodeId].human)){v+=.3;n.push("with a person kept in the loop rather than assumed")}else n.push("but nobody reviews anything anywhere in it, on a task the AI Act treats as high-risk");if(state.owner){v+=.2;n.push(`and ${state.owner} named as accountable when it is wrong`)}else n.push("and no owner named, so accountability sits nowhere");const sensitive=state.dataScopes.filter(d=>(byId(DATA_SCOPES,d)||{}).sensitivity==="high").length;if(sensitive&&state.mapNodes.some(x=>NODE_MAP[x.nodeId].human)){v+=.2;n.push(`you let it touch ${sensitive} sensitive data source${sensitive>1?"s":""} and put human review in front of the output, which is the right order`)}else if(sensitive)n.push(`it touches ${sensitive} sensitive data source${sensitive>1?"s":""} with no human gate`);if(state.buildNote.trim()){v=Math.min(1,v+.1);n.push("and you added your own condition on top of the generated process")}}else n.push("No process was drawn, so there is nothing to judge here yet.");out.push({id:"solution",strength:v,note:cap(n.join("; "))+"."})}{let v=.1;const n=[],traps=deployTraps();const lanes=Object.keys(state.rollout);if(lanes.length>=3){v+=.2;n.push(`you sequenced ${lanes.length} steps across the year rather than listing them`)}if(lanes.includes("r2")){v+=.2;n.push("works council consultation is in the plan")}else n.push("works council consultation is missing entirely");if(state.successMetrics.length>=2&&state.successMetrics.every(m=>(m.target||"").trim())){v+=.2;n.push("you committed to targets against a baseline, so this can be judged later")}else n.push("without a target against the baseline nobody can tell afterwards whether this worked");if(state.pilotScope&&state.pilotDuration){v+=.2;n.push(`and you named the smallest real test: ${byId(PILOT_SCOPES,state.pilotScope).label.toLowerCase()} over ${state.pilotDuration.toLowerCase()}`)}else n.push("and there is no test defined, which is the part that makes this an MVP rather than a description");if(state.risks.length>=3&&state.risks.every(r=>(r.mitigation||"").trim().length>5)){v+=.2;n.push("every risk you raised has a mitigation against it")}out.push({id:"deployment",strength:Math.max(0,v-traps.length*.12),note:cap(n.join("; "))+".",traps})}return out}function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}function improvementPrompt(){const weakest=scorecard().sort((a,b)=>a.strength-b.strength)[0];const map={framing:"Push the diagnosis one layer deeper. Ask what would have to be true for this problem to stop happening on its own.",fit:"Reread the cause you named, then reread the use case you chose. If they are not about the same thing, one of them is wrong.",prioritisation:"Say out loud what you rejected and why. A recommendation with no discarded alternative is not a recommendation.",solution:"Walk the process backwards from the output. The place where nobody checks anything is the place that will hurt you.",deployment:"A plan nobody can stop is not a plan. Name the test, the date you look at it, and what result would make you walk away."};return map[weakest.id]}function icon(name,size,color){const def=window.lucide&&window.lucide.icons&&window.lucide.icons[name];if(!def)return`<span style="display:inline-block;width:${size}px;height:${size}px"></span>`;const kids=(def[2]||[]).map(([tag,attrs])=>`<${tag} ${Object.entries(attrs).map(([k,v])=>`${k}="${v}"`).join(" ")} />`).join("");return`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24"
+  </div>`}function stageSettled(pid){const u=pickForStage(pid);if(!u)return false;return true}function pickForStage(pid){return state.shortlist.map(id=>allCases().find(u=>u.id===id)).find(u=>u&&u.stage===pid)||null}function fillScores(){shortlistCases().forEach(u=>{const sc=state.scores[u.id]||{};state.scores[u.id]=Object.fromEntries(CRITERIA.map(c=>[c.id,sc[c.id]||3]))})}function fillSkipped(target){if(target>=4)focusStages().forEach(f=>{if(pickForStage(f.id))return;const first=allCases().find(u=>u.stage===f.id&&!u.isCustom);if(first)state.shortlist.push(first.id)});if(target>=5){fillScores();if(!state.chosen){const ranked=shortlistCases().sort((a,b)=>weightedScore(b.id)-weightedScore(a.id));if(ranked.length)state.chosen=ranked[0].id}}}function weightedScore(ucId){const s=state.scores[ucId];if(!s)return 0;const w=state.weights,tot=CRITERIA.reduce((a,c)=>a+(w[c.id]||0),0)||1;return CRITERIA.reduce((a,c)=>a+(s[c.id]||0)*(w[c.id]||0),0)/tot}function deployTraps(){const t=[],lane=id=>state.rollout[id],order={t1:0,t2:1,t3:2};if(lane("r9")==="t1")t.push(TRAPS.scaleEarly);if(lane("r1")&&lane("r2")&&order[lane("r2")]>order[lane("r1")])t.push(TRAPS.councilLate);if(lane("r1")&&lane("r3")&&order[lane("r3")]>order[lane("r1")])t.push(TRAPS.dpiaLate);if(lane("r1")&&!lane("r8"))t.push(TRAPS.noBaseline);if(Object.keys(state.rollout).length&&!lane("r10"))t.push(TRAPS.noDecision);if(!state.killCriterion.trim())t.push(TRAPS.noKill);return t}function scorecard(){const out=[];const focus=focusStages();const chosen=state.chosen?allCases().find(u=>u.id===state.chosen):null;{let v=.2;const n=[];if(state.situationAttempts===1){v+=.25;n.push("you read the process correctly first time, without being walked to it")}else if(state.situationAttempts===2){v+=.15;n.push("it took you two looks to find where the process was losing, which is a fair read of a messy picture")}else if(state.situationAttempts>2)n.push(`it took ${state.situationAttempts} attempts to locate the losses, so spend longer in the evidence next time before committing`);if(focus.length){v+=.15;n.push(`and committed to ${focus.map(f=>f.name).join(" and ")}`)}if(state.situationStatement!==null&&state.situationStatement.trim()){v+=.25;n.push("you then wrote the situation in your own words rather than taking our draft")}else n.push("but you left our draft statement untouched, so we can see where you think the problem sits and not what you think it is");out.push({id:"framing",strength:v,note:n.length?cap(n.join("; "))+".":"Not enough of the diagnosis was done to say anything useful."})}{let v=.4;const n=[];const inFocus=chosen&&!chosen.isCustom&&state.processPicks.includes(chosen.stage);if(inFocus){v=1;n.push(`“${chosen.name}” sits in ${byId(PROCESS.stages,chosen.stage).name}, one of the two stages you said were the problem`)}else if(chosen&&chosen.isCustom){v=.8;n.push("you wrote your own use case rather than taking one off the shelf, which usually means you had something specific in mind")}else if(chosen){v=.3;n.push(`“${chosen.name}” sits in ${byId(PROCESS.stages,chosen.stage).name}, which is not one of the two stages you identified — it may be a good idea, but it is not the problem you diagnosed`)}const own=state.customCases.filter(c=>c.name.trim()&&state.shortlist.includes(c.id)).length;if(own){v=Math.min(1,v+.15);n.push(`${own} of your two is your own rather than one of ours`)}if(state.ownBeforeSuggestions)n.push("and you had written something before opening our suggestions, which is the harder way round");out.push({id:"fit",strength:v,note:n.length?cap(n.join("; "))+".":"No use case was selected."})}{let v=.2;const n=[];if(state.shortlist.length===2){v+=.2;n.push("you put one answer against each of your two stages rather than settling on a favourite early")}if(state.profile){v+=.2;n.push(`you declared a stance (${byId(PRIORITY_PROFILES,state.profile).name.toLowerCase()}) rather than scoring blind`)}const ranked=state.shortlist.map(id=>({id,v:weightedScore(id)})).sort((a,b)=>b.v-a.v);if(ranked.length&&state.chosen===ranked[0].id){v+=.2;n.push("your choice matches your own weighting, so the scoring meant something")}else if(ranked.length&&state.chosen)n.push("your choice is not the top option under your own weights, which can be right but needs saying out loud in the pitch");if(state.rejection.trim().length>=25){v+=.2;n.push("you said what you turned down and why")}else n.push("the rejection rationale is thin, and what you decided not to do is half the decision");out.push({id:"prioritisation",strength:v,note:cap(n.join("; "))+"."})}{let v=.1;const n=[];if(state.mapBuilt){v+=.2;n.push(`you laid out ${state.mapNodes.length} steps end to end`);if(state.mapNodes.some(x=>NODE_MAP[x.nodeId].human)){v+=.3;n.push("with a person kept in the loop rather than assumed")}else n.push("but nobody reviews anything anywhere in it, on a task the AI Act treats as high-risk");if(state.owner){v+=.2;n.push(`and ${state.owner} named as accountable when it is wrong`)}else n.push("and no owner named, so accountability sits nowhere");const sensitive=state.dataScopes.filter(d=>(byId(DATA_SCOPES,d)||{}).sensitivity==="high").length;if(sensitive&&state.mapNodes.some(x=>NODE_MAP[x.nodeId].human)){v+=.2;n.push(`you let it touch ${sensitive} sensitive data source${sensitive>1?"s":""} and put human review in front of the output, which is the right order`)}else if(sensitive)n.push(`it touches ${sensitive} sensitive data source${sensitive>1?"s":""} with no human gate`);if(state.buildNote.trim()){v=Math.min(1,v+.1);n.push("and you added your own condition on top of the generated process")}}else n.push("No process was drawn, so there is nothing to judge here yet.");out.push({id:"solution",strength:v,note:cap(n.join("; "))+"."})}{let v=.1;const n=[],traps=deployTraps();const lanes=Object.keys(state.rollout);if(lanes.length>=3){v+=.2;n.push(`you sequenced ${lanes.length} steps across the year rather than listing them`)}if(lanes.includes("r2")){v+=.2;n.push("works council consultation is in the plan")}else n.push("works council consultation is missing entirely");if(state.successMetrics.length>=2&&state.successMetrics.every(m=>(m.target||"").trim())){v+=.2;n.push("you committed to targets against a baseline, so this can be judged later")}else n.push("without a target against the baseline nobody can tell afterwards whether this worked");if(state.pilotScope&&state.pilotDuration){v+=.2;n.push(`and you named the smallest real test: ${byId(PILOT_SCOPES,state.pilotScope).label.toLowerCase()} over ${state.pilotDuration.toLowerCase()}`)}else n.push("and there is no test defined, which is the part that makes this an MVP rather than a description");if(state.risks.length>=3&&state.risks.every(r=>(r.mitigation||"").trim().length>5)){v+=.2;n.push("every risk you raised has a mitigation against it")}out.push({id:"deployment",strength:Math.max(0,v-traps.length*.12),note:cap(n.join("; "))+".",traps})}return out}function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}function improvementPrompt(){const weakest=scorecard().sort((a,b)=>a.strength-b.strength)[0];const map={framing:"Push the diagnosis one layer deeper. Ask what would have to be true for this problem to stop happening on its own.",fit:"Reread the cause you named, then reread the use case you chose. If they are not about the same thing, one of them is wrong.",prioritisation:"Say out loud what you rejected and why. A recommendation with no discarded alternative is not a recommendation.",solution:"Walk the process backwards from the output. The place where nobody checks anything is the place that will hurt you.",deployment:"A plan nobody can stop is not a plan. Name the test, the date you look at it, and what result would make you walk away."};return map[weakest.id]}function icon(name,size,color){const def=window.lucide&&window.lucide.icons&&window.lucide.icons[name];if(!def)return`<span style="display:inline-block;width:${size}px;height:${size}px"></span>`;const kids=(def[2]||[]).map(([tag,attrs])=>`<${tag} ${Object.entries(attrs).map(([k,v])=>`${k}="${v}"`).join(" ")} />`).join("");return`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24"
     fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
     style="flex-shrink:0">${kids}</svg>`}const card=(inner,extra="")=>`<div class="bg-white border border-line rounded-xl ${extra}">${inner}</div>`;function pill(label,active,act,extra=""){return`<button data-act="${act}" class="${extra} px-3.5 py-1.5 rounded-full text-[13px] font-medium border transition-colors ${active?"bg-teal-dark text-white border-teal-dark":"bg-white text-body border-line hover:border-teal"}">${label}</button>`}function primaryBtn(label,act,disabled=false){return`<button data-act="${act}" ${disabled?"disabled":""} class="px-6 py-2.5 rounded-full text-[14px] font-semibold transition-colors ${disabled?"bg-wash2 text-faint cursor-not-allowed":"bg-teal-dark text-white hover:bg-teal"}">${label}</button>`}function ghostBtn(label,act){return`<button data-act="${act}" class="px-5 py-2.5 rounded-full text-[14px] font-medium border border-ink/25 text-ink hover:border-ink transition-colors">${label}</button>`}function sectionHead(kicker,title,sub){return`<div class="mb-5">
     <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-1.5">${kicker}</div>
     <h2 class="text-[26px] font-bold text-ink leading-tight">${title}</h2>
     ${sub?`<p class="text-[15px] text-muted leading-relaxed mt-1.5 max-w-3xl">${sub}</p>`:""}
-  </div>`}function subFooter(backAct,nextAct,nextLabel,disabled,hint){return`<div class="mt-9 pt-6 border-t border-line flex items-center justify-between gap-4 flex-wrap">
-    <div class="text-[13px] text-faint">${disabled?"":hint||""}</div>
-    <div class="flex gap-2.5">
-      ${ghostBtn("Back",backAct)}
-      ${primaryBtn(nextLabel,nextAct)}
-    </div>
-  </div>`}function priorProgress(active){const steps=[["score","Score"],["land","Choose"]];return`<div class="flex items-center gap-2 mb-5">
+  </div>`}function subFooter(backAct,nextAct,nextLabel,disabled,hint){return setNav(backAct,nextAct,nextLabel,disabled?"":hint||"")}function priorProgress(active){const steps=[["score","Score"],["land","Choose"]];return`<div class="flex items-center gap-2 mb-5">
     ${steps.map(([k,l],i)=>`<span class="flex items-center gap-2">
       <span class="w-2 h-2 rounded-full ${k===active?"bg-teal-dark":steps.findIndex(x=>x[0]===active)>i?"bg-teal/50":"bg-line"}"></span>
       <span class="text-[11.5px] font-semibold ${k===active?"text-ink":"text-faint"}">${l}</span>
@@ -93,15 +87,15 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
     ${open?`<div class="mt-2 p-4 rounded-xl bg-lav/25 border border-lav text-[13.5px] text-ink2 leading-relaxed fadein">
       <span class="font-semibold">From a different company, so you cannot copy it:</span> ${EXAMPLES[stageKey]}
     </div>`:""}
-  </div>`}function stageFooter(canAdvance,hint){const last=state.stage===STAGES.length-1;return`<div class="mt-9 pt-6 border-t border-line flex items-center justify-between gap-4 flex-wrap">
-    <div class="text-[13px] text-faint">${canAdvance?hint||"":""}</div>
-    <div class="flex gap-2.5">
-      ${state.stage>0?ghostBtn("Back","go:"+(state.stage-1)):"<span></span>"}
-      ${last?primaryBtn("Present this","view:present"):primaryBtn("Log and continue","go:"+(state.stage+1))}
+  </div>`}let NAV=null;function setNav(back,next,nextLabel,middle,blocked){NAV={back,next,nextLabel:nextLabel||"Next →",middle:middle||"",blocked:!!blocked};return""}function navBar(){if(!NAV)return"";return`<div class="shrink-0 border-t border-line bg-white">
+    <div class="max-w-[1080px] mx-auto px-8 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+      <div>${NAV.back?`<button data-act="${NAV.back}" class="px-5 py-2.5 rounded-full text-[14px] font-semibold border border-line bg-white text-ink2 hover:border-teal-dark">← Back</button>`:""}</div>
+      <div class="flex items-center justify-center text-[13px] text-faint text-center">${NAV.middle}</div>
+      <div class="flex justify-end">${NAV.next?`<button data-act="${NAV.next}" ${NAV.blocked?"disabled":""} class="px-6 py-2.5 rounded-full text-[14px] font-semibold ${NAV.blocked?"bg-wash2 text-faint cursor-not-allowed":"bg-teal-dark text-white hover:bg-teal"}">${NAV.nextLabel}</button>`:""}</div>
     </div>
-  </div>`}function decisionTrail(){const d=[];if(state.ceoRead.trim())d.push({s:0,t:"What the CEO actually needs"});if(state.situationConfirmed)d.push({s:1,t:focusStages().map(f=>f.name).join(" + ")});if(state.profile)d.push({s:2,t:"Stance: "+byId(STANCES,state.profile).name});if(state.shortlist.length)d.push({s:3,t:`Shortlist of ${state.shortlist.length}`});if(state.chosen)d.push({s:4,t:"Chosen: "+(allCases().find(u=>u.id===state.chosen)||{}).name});if(state.rejection.trim())d.push({s:4,t:"Rejection rationale"});if(state.owner)d.push({s:5,t:"Owner: "+state.owner});if(state.mapBuilt)d.push({s:5,t:`Process map, ${state.mapNodes.length} steps`});if(Object.keys(state.rollout).length)d.push({s:6,t:"Rollout sequenced"});if(state.successMetrics.length)d.push({s:6,t:"Success measures"});if(state.pilotScope)d.push({s:6,t:"The MVP test"});if(state.risks.length)d.push({s:7,t:`${state.risks.length} guardrail${state.risks.length>1?"s":""}`});return d}function rail(){const trail=decisionTrail();return`<aside class="w-[212px] shrink-0 border-r border-line bg-white flex flex-col">
+  </div>`}function slideDots(n,i,act){return`<div class="flex items-center gap-1.5">${Array.from({length:n},(_,k)=>`<button data-act="${act}:${k}" aria-label="Slide ${k+1}" class="h-2 rounded-full transition-all ${k===i?"w-6 bg-teal-dark":"w-2 bg-teal-dark/30 hover:bg-teal-dark/60"}"></button>`).join("")}</div>`}function stageFooter(canAdvance,hint){const last=state.stage===STAGES.length-1;return setNav(state.stage>0?"go:"+nextStage(state.stage,-1):null,last?"view:present":"go:"+nextStage(state.stage,1),last?"Present this":"Next →",canAdvance?hint||"":"")}function decisionTrail(){const d=[];if(state.ceoRead.trim())d.push({s:0,t:"What the CEO actually needs"});if(state.situationConfirmed)d.push({s:1,t:focusStages().map(f=>f.name).join(" + ")});if(state.profile)d.push({s:2,t:"Stance: "+byId(STANCES,state.profile).name});if(state.shortlist.length)d.push({s:3,t:`Shortlist of ${state.shortlist.length}`});if(buildIds().length)d.push({s:4,t:"Taking forward: "+buildIds().map(id=>(allCases().find(u=>u.id===id)||{}).name||"Untitled").join(" + ")});if(state.rejection.trim())d.push({s:4,t:"Rejection rationale"});{const ids=buildIds(),n=ids.filter(id=>oneBuildDone(buildOf(id))).length;if(n)d.push({s:5,t:`Built ${n} of ${ids.length} use cases`})}if(Object.keys(state.rollout).length)d.push({s:6,t:"Rollout sequenced"});if(state.successMetrics.length)d.push({s:6,t:"Success measures"});if(state.pilotScope)d.push({s:6,t:"The MVP test"});if(state.risks.length)d.push({s:7,t:`${state.risks.length} guardrail${state.risks.length>1?"s":""}`});return d}function rail(){const trail=decisionTrail();return`<aside class="w-[212px] shrink-0 border-r border-line bg-white flex flex-col">
     <nav class="p-3">
-      ${STAGES.map(s=>{const done=s.id<state.stage,active=s.id===state.stage;return`<button data-act="go:${s.id}" class="w-full text-left flex items-start gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 transition-colors ${active?"bg-teal/[0.1]":"hover:bg-wash"}">
+      ${visibleStages().map(s=>{const done=s.id<state.stage,active=s.id===state.stage;return`<button data-act="go:${s.id}" class="w-full text-left flex items-start gap-2.5 px-2.5 py-2 rounded-lg mb-0.5 transition-colors ${active?"bg-teal/[0.1]":"hover:bg-wash"}">
           <span class="mt-[3px] w-[15px] h-[15px] shrink-0 rounded-full border-2 flex items-center justify-center ${done?"border-teal-dark bg-teal-dark":active?"border-teal-dark":"border-line"}">
             ${done?'<span class="text-white text-[9px] leading-none font-bold">✓</span>':active?'<span class="w-1.5 h-1.5 rounded-full bg-teal-dark"></span>':""}
           </span>
@@ -166,66 +160,55 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
   </div>`}function constraintsStrip(){return`<div class="shrink-0 border-t border-line bg-wash2 px-5 py-2 flex items-center gap-3 flex-wrap">
     <span class="text-[10px] font-bold uppercase tracking-[0.12em] text-faint shrink-0">Constraints</span>
     ${CONSTRAINTS.map(c=>`<span title="${esc(c.full)}" class="term text-[12px] text-body">${c.short}</span>`).join('<span class="text-line">·</span>')}
-  </div>`}function stageBrief(){const tabs=[["org","Organisation"],["pressure","Pressure"],["record","Track record"],["voices","Voices"]];let panel="";if(state.briefTab==="org"){panel=`<div class="grid md:grid-cols-4 gap-3 mb-5">
-        ${COMPANY.facts.map(f=>`<div class="p-4 rounded-xl bg-wash border border-line">
-          <div class="text-[24px] font-bold text-ink leading-none">${f.value}</div>
-          <div class="text-[13px] font-semibold text-ink2 mt-1.5">${f.label}</div>
-          <div class="text-[12px] text-faint mt-0.5">${f.note}</div></div>`).join("")}
+  </div>`}function briefSlides(){const voices=["v1","v3","v5","v11"].map(id=>VOICES.find(v=>v.id===id));return[{section:"The ask",title:"The brief you were given",body:`<div class="p-8 rounded-2xl border-[1.5px] border-yeld bg-yel/30">
+        <div class="text-[12px] font-bold uppercase tracking-[0.12em] text-yeld mb-3">From ${CEO_FOCUS.from}</div>
+        <div class="text-[22px] md:text-[24px] font-normal text-ink leading-snug italic">“${CEO_FOCUS.line}”</div>
       </div>
-      <div class="grid md:grid-cols-2 gap-5">
-        <div>
-          <h3 class="text-[15px] font-bold text-ink mb-2.5">Systems</h3>
-          ${COMPANY.systems.map(s=>`<div class="flex items-baseline gap-2 py-1.5 border-b border-line last:border-0">
-            <span class="text-[13.5px] font-semibold text-ink2 w-[150px] shrink-0">${s.name}</span>
-            <span class="text-[13px] text-muted flex-1">${s.role}</span>
-            <span class="text-[11px] px-2 py-0.5 rounded-full bg-wash2 text-muted shrink-0">${s.health}</span></div>`).join("")}
-        </div>
-        <div>
-          <h3 class="text-[15px] font-bold text-ink mb-2.5">Governance as it stands</h3>
-          ${COMPANY.governance.map(g=>`<div class="flex gap-2 text-[13.5px] text-body leading-relaxed mb-1.5">
-            <span class="text-teal-dark mt-0.5">›</span><span>${g}</span></div>`).join("")}
-        </div>
-      </div>`}if(state.briefTab==="pressure"){panel=`<p class="text-[17px] font-medium text-ink2 leading-relaxed mb-5 max-w-3xl">${PRESSURE.headline}</p>
-      <div class="grid md:grid-cols-5 gap-3 mb-6">
+      <p class="text-[16px] text-muted mt-6 max-w-3xl">Keep this ask in mind as we look at the context NordWeave is working within.</p>`},{section:"Organisation",title:COMPANY.name,body:`<p class="text-[18px] text-ink2 leading-relaxed mb-1">${COMPANY.descriptor}.</p>
+      <p class="text-[14px] text-muted mb-7">Headquartered in ${COMPANY.hq}.</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        ${COMPANY.facts.map(f=>`<div class="p-5 rounded-xl bg-wash border border-line">
+          <div class="text-[30px] font-bold text-ink leading-none">${f.value}</div>
+          <div class="text-[14px] font-semibold text-ink2 mt-2">${f.label}</div>
+          <div class="text-[12.5px] text-faint mt-0.5">${f.note}</div></div>`).join("")}
+      </div>`},{section:"Pressure",title:"Why now",body:`<p class="text-[20px] font-medium text-ink2 leading-relaxed mb-7 max-w-3xl">${PRESSURE.headline}</p>
+      <div class="grid md:grid-cols-3 gap-3">
         ${PRESSURE.points.map(p=>`<div class="p-4 rounded-xl border border-line bg-white">
-          <div class="text-[20px] font-bold text-teal-dark leading-none">${p.stat}</div>
-          <div class="text-[12.5px] font-semibold text-ink2 mt-1.5 leading-snug">${p.label}</div>
-          <div class="text-[11.5px] text-faint mt-1 leading-snug">${p.note}</div></div>`).join("")}
-      </div>
-      <div class="p-5 rounded-xl border-[1.5px] border-yeld bg-yel/30">
-        <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-yeld mb-1.5">The brief you were given</div>
-        <div class="text-[17px] font-semibold text-ink leading-snug mb-1.5">${PRESSURE.theAsk}</div>
-        <div class="text-[13.5px] text-body">${PRESSURE.theAskNote}</div>
-      </div>`}if(state.briefTab==="record"){panel=`<p class="text-[13.5px] text-muted mb-5 max-w-3xl">${TRACK_RECORD.lead}</p>
-      <div class="space-y-2.5">
-        ${TRACK_RECORD.items.map(r=>`<div class="grid md:grid-cols-[112px_1fr] gap-x-4 gap-y-1.5 p-4 rounded-xl border border-line bg-white">
-          <div class="text-[11.5px] font-bold uppercase tracking-[0.08em] text-teal-dark md:pt-0.5">${r.when}</div>
-          <div>
-            <div class="text-[14.5px] font-bold text-ink leading-snug mb-1">${r.what}</div>
-            <div class="text-[13.5px] text-body leading-relaxed mb-2">${r.outcome}</div>
-            <div class="flex gap-2 text-[13px] text-ink2 leading-snug">
-              <span class="text-yeld font-bold shrink-0">→</span><span class="font-medium">${r.signal}</span>
-            </div>
-          </div>
+          <div class="text-[24px] font-bold text-teal-dark leading-none">${p.stat}</div>
+          <div class="text-[13px] font-semibold text-ink2 mt-2 leading-snug">${p.label}</div></div>`).join("")}
+      </div>`},{section:"Organisation",title:"Current AI use",body:`<div class="grid md:grid-cols-3 gap-4">
+        ${COMPANY.aiUse.map(g=>`<div class="p-6 rounded-xl bg-wash border border-line text-[18px] font-semibold text-ink2 leading-snug">${g}</div>`).join("")}
+      </div>`},{section:"Voices",title:"What people say",body:`      <div class="grid md:grid-cols-2 gap-4">
+        ${voices.map(v=>`<div class="p-5 rounded-xl border border-line bg-white">
+          <div class="text-[17px] text-ink2 leading-relaxed italic mb-2.5">“${v.quote}”</div>
+          <div class="text-[12.5px] font-semibold text-teal-dark">${v.who}<span class="text-faint font-normal"> · ${v.where}</span></div>
         </div>`).join("")}
-      </div>`}if(state.briefTab==="voices"){panel=`<p class="text-[13.5px] text-muted mb-4 max-w-3xl">Eight people describing the same process. They do not agree with each other. That disagreement is the material.</p>
-      <div class="grid md:grid-cols-2 gap-3">
-        ${VOICES.map(v=>`<div class="p-4 rounded-xl border border-line bg-white">
-          <div class="text-[14.5px] text-ink2 leading-relaxed italic mb-2">“${v.quote}”</div>
-          <div class="text-[12px] font-semibold text-teal-dark">${v.who}<span class="text-faint font-normal"> · ${v.where}</span></div>
-        </div>`).join("")}
-      </div>`}const unread=tabs.filter(([k])=>!state.briefSeen.includes(k));const ready=state.ceoRead.trim().length>10&&state.tableName.trim().length>0&&!unread.length;return`<div class="fadein">
-    ${sectionHead("Stage 0 · 10 minutes","The brief","Every table in this room is working the same company. Read all four sections before you move on: the rest of the session assumes you have.")}
-    <div class="flex gap-1.5 mb-5 border-b border-line flex-wrap">
-      ${tabs.map(([k,l])=>{const seen=state.briefSeen.includes(k),here=state.briefTab===k;return`<button data-act="tab:${k}" class="flex items-center gap-1.5 px-4 py-2.5 text-[13.5px] font-semibold border-b-2 -mb-px transition-colors ${here?"border-teal-dark text-ink":"border-transparent text-faint hover:text-body"}">
-          <span class="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${seen?"bg-teal-dark text-white":"border border-faint/60 text-faint"}">${seen?"✓":""}</span>
-          ${l}</button>`}).join("")}
-      <span class="ml-auto self-center text-[12px] ${unread.length?"text-faint":"text-teal-dark font-semibold"}">
-        ${unread.length?state.briefSeen.length+" of 4 read":"All four read"}</span>
-    </div>
-    <div class="mb-8">${panel}</div>
-
-    ${card(`<div class="p-5">
+      </div>`},{section:"Summary",title:"Everything you know so far",body:`<div class="grid md:grid-cols-2 gap-4">
+        <div class="md:col-span-2 p-5 rounded-xl border-[1.5px] border-yeld bg-yel/30">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-yeld mb-1">The ask</div>
+          <div class="text-[16px] text-ink leading-snug">${BRIEF_SUMMARY.ask}</div>
+        </div>
+        <div class="md:col-span-2 grid md:grid-cols-2 gap-4">${SITUATION_ANSWER.map(id=>problemBox(id)).join("")}</div>
+        <div class="p-5 rounded-xl bg-wash border border-line">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-faint mb-2">NordWeave</div>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">${COMPANY.facts.map(f=>`<div><span class="text-[17px] font-bold text-ink">${f.value}</span> <span class="text-[12.5px] text-muted">${/^[A-Z]{2}/.test(f.label)?f.label:f.label.toLowerCase()}</span></div>`).join("")}</div>
+        </div>
+        <div class="p-5 rounded-xl bg-wash border border-line">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-faint mb-2">Why now</div>
+          <div class="text-[13.5px] text-ink2 leading-snug mb-2">${BRIEF_SUMMARY.whyNow}</div>
+          <div class="flex flex-wrap gap-x-4 gap-y-1">${PRESSURE.points.map(p=>`<span class="text-[12.5px] text-muted"><span class="font-bold text-teal-dark">${p.stat}</span> ${p.label}</span>`).join("")}</div>
+        </div>
+        <div class="p-5 rounded-xl bg-wash border border-line">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-faint mb-2">Current AI use</div>
+          ${COMPANY.aiUse.map(g=>`<div class="flex gap-2 text-[13.5px] text-ink2 leading-snug mb-1"><span class="text-teal-dark">›</span><span>${g}</span></div>`).join("")}
+        </div>
+        <div class="p-5 rounded-xl bg-wash border border-line">
+          <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-faint mb-2">What people say</div>
+          ${BRIEF_SUMMARY.voices.map(g=>`<div class="flex gap-2 text-[13.5px] text-ink2 leading-snug mb-1"><span class="text-teal-dark">›</span><span>${g}</span></div>`).join("")}
+        </div>
+      </div>`}]}function stageBrief(){const slides=briefSlides();const last=slides.length-1;const i=Math.max(0,Math.min(state.briefSlide,last));const sl=slides[i];const done=state.briefMax>=last;const ready=done&&state.tableName.trim().length>0;return`<div class="fadein">${setNav(i===0?null:"bslide:"+(i-1),i===last?"go:"+nextStage(0,1):"bslide:"+(i+1),"Next →",slideDots(slides.length,i,"bslide"))}
+    ${sectionHead(`Stage ${stageNo(0)} · 10 minutes`,"The brief","Every table in this room is working the same company. Click through every slide before you move on: the rest of the session assumes you have.")}
+    ${i===last?`<div class="mb-6">${card(`<div class="p-5">
       <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-3">Step 2 · Your first decision</div>
       <div class="grid md:grid-cols-[220px_1fr] gap-5">
         <div>
@@ -233,13 +216,23 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
           <input id="tableName" data-in="tableName" value="${esc(state.tableName)}" class="w-full px-3 py-2 rounded-lg border border-line text-[14px] focus:border-teal-dark focus:outline-none" />
         </div>
         <div>
-          <label for="ceoRead" class="block text-[13px] font-semibold text-ink2 mb-1.5">The CEO asked for “an AI answer to performance management”. In one line, what does he actually need?</label>
-          <input id="ceoRead" data-in="ceoRead" value="${esc(state.ceoRead)}" placeholder="He needs people to know where they stand. AI may or may not be how." class="w-full px-3 py-2 rounded-lg border border-line text-[14px] focus:border-teal-dark focus:outline-none" />
+          <label for="ceoRead" class="block text-[13px] font-semibold text-ink2 mb-1.5">Using the summary below: in one line, what does NordWeave actually need?</label>
+          <input id="ceoRead" data-in="ceoRead" value="${esc(state.ceoRead)}" placeholder="People who know where they stand. AI may or may not be how." class="w-full px-3 py-2 rounded-lg border border-line text-[14px] focus:border-teal-dark focus:outline-none" />
           <div class="text-[12px] text-faint mt-1.5">This is the altitude the rest of your session runs at. It goes on your pitch card.</div>
         </div>
       </div>
-    </div>`)}
-    ${stageFooter(ready,ready?"":unread.length?`Still to read: ${unread.map(t=>t[1]).join(", ")}.`:"Name your table and answer the question above to continue.")}
+    </div>`)}</div>`:""}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden mb-8">
+      <div class="px-6 md:px-10 pt-7 pb-8 min-h-[420px]">
+        <div class="flex items-baseline justify-between gap-3 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">${sl.section}</span>
+          <span class="text-[12px] text-faint tabular-nums">${i+1} / ${slides.length}</span>
+        </div>
+        <h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-6">${sl.title}</h3>
+        ${sl.body}
+      </div>
+    </div>
+
   </div>`}function checkSituation(){state.situationConfirmed=true;const all=SITUATION_ANSWER.map(id=>state.stageWhy[id]||"").join(" ").toLowerCase();state.situationCheck={ok:true,lead:SITUATION_FEEDBACK.correct,met:CASE_TESTS.filter(t=>t.words.some(w=>all.includes(w))),miss:CASE_TESTS.filter(t=>!t.words.some(w=>all.includes(w)))};state.processPicks.forEach(pid=>{if(state.customCases.some(c=>c.stage===pid))return;state.customCases.push({id:"own-"+pid,stage:pid,name:"",does:"",doesNot:"",isCustom:true,factors:[],nodes:["input-schedule","proc-ai-agent","proc-human-review","output-notification"]})})}function actorChips(ids,size){const small=size==="sm";return`<div class="flex flex-wrap gap-1">${ids.map(id=>{const a=ACTORS[id];return`<span class="rounded-full font-semibold ${small?"text-[9px] px-1.5 py-[1px]":"text-[11px] px-2.5 py-1"}"
       style="background:${a.color}1F;color:${a.color}">${a.short}</span>`}).join("")}</div>`}function processFlow(){const max=Math.max(...PROCESS.stages.map(p=>p.hours));return`<div class="rounded-2xl border border-line bg-white overflow-hidden">
     <div class="px-5 py-3.5 border-b border-line">
@@ -325,23 +318,7 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
       ${!vs.length&&!ms.length?'<div class="text-[13px] text-faint leading-relaxed">No interviews or measures were captured for this stage. The time it takes and what leaks out of it are all we have on it.</div>':""}
     </div>
   </div>`}function stageSituate(){const chk=state.situationCheck;const cross=CROSS_CUTTING.map(id=>byId(VOICES,id)).filter(Boolean);const focus=SITUATION_ANSWER.map(id=>byId(PROCESS.stages,id));const answered=SITUATION_ANSWER.filter(id=>(state.stageWhy[id]||"").trim().length>15);const ready=answered.length===SITUATION_ANSWER.length;return`<div class="fadein">
-    ${sectionHead("Stage 1 · 20 minutes","Assess the situation","The two stages have already been named for you. What has not been decided is whether that was the right call, and you are the ones who have to defend it.")}
-
-    <div class="mb-6 p-5 rounded-2xl border-[1.5px] border-yeld bg-yel/30">
-      <div class="flex items-start gap-3.5">
-        <span class="w-10 h-10 shrink-0 rounded-full bg-yeld text-white flex items-center justify-center text-[15px] font-bold">KV</span>
-        <div class="flex-1 min-w-0">
-          <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-yeld mb-1.5">From ${CEO_FOCUS.from}</div>
-          <div class="text-[16px] text-ink leading-relaxed italic mb-2.5">“${CEO_FOCUS.line}”</div>
-          <div class="flex flex-wrap items-center gap-2">
-            ${focus.map(f=>`<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-yeld/60 text-[12.5px] font-semibold text-ink">
-              <span class="w-4 h-4 rounded-full bg-teal-dark text-white flex items-center justify-center text-[9px] font-bold">${f.n}</span>
-              ${f.name} <span class="text-teal-dark">${f.hours} h</span></span>`).join("")}
-            <span class="text-[12.5px] text-body">— ${focus.reduce((a,f)=>a+f.hours,0)} of ${PROCESS.totalHours} hours</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    ${sectionHead(`Stage ${stageNo(1)} · 20 minutes`,"Assess the situation","The two stages have already been named for you. What has not been decided is whether that was the right call, and you are the ones who have to defend it.")}
 
     ${methodPanel(METHOD.situation)}
 
@@ -523,27 +500,54 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
           <span class="text-muted">${st.blindSpot}</span></div>
       </div>
     </div>
-  </button>`}function stageStance(){const sel=state.profile?byId(STANCES,state.profile):null;return`<div class="fadein">
-    ${sectionHead("Stage 2 · 5 minutes","Pick your stance","Before you look at a single use case, decide how you intend to come at this. The same evidence supports all three. What differs is what you are willing to trade.")}
-
-    <div class="pl-3 border-l-[3px] border-teal-dark mb-6">
-      <div class="text-[10px] font-bold uppercase tracking-[0.1em] text-faint mb-1">Your situation</div>
-      <div class="text-[15.5px] text-ink2 leading-relaxed">${esc(state.situationStatement??draftSituation())}</div>
+  </button>`}function stanceSlide(st){const t=STANCE_TONE[st.tone]||STANCE_TONE.teal;return`<div class="flex items-center gap-3.5 mb-5">
+        <span class="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center ${t.chip}">${icon(st.icon,24,"#FFFFFF")}</span>
+        <span>
+          <span class="block text-[11px] font-bold uppercase tracking-[0.12em] ${t.text}">${st.persona}</span>
+          <span class="block text-[28px] md:text-[32px] font-bold text-ink leading-tight">${st.name}</span>
+        </span>
+      </div>
+      <div class="text-[22px] font-semibold text-ink2 italic leading-snug mb-5">“${st.creed}”</div>
+      <p class="text-[16px] text-body leading-relaxed mb-6 max-w-3xl">${st.believes}</p>
+      <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-wash border border-line">
+            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-1">Accepts</div>
+            <div class="text-[14.5px] text-ink2 leading-snug">${st.accepts}</div>
+          </div>
+          <div class="p-4 rounded-xl bg-wash border border-line">
+            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-1">Blind spot</div>
+            <div class="text-[14.5px] text-ink2 leading-snug">${st.blindSpot}</div>
+          </div>
+      </div>`}function stancePickCard(st){const on=state.profile===st.id;const t=STANCE_TONE[st.tone]||STANCE_TONE.teal;return`<button data-act="profile:${st.id}" class="text-left h-full flex flex-col p-5 rounded-2xl border-[1.5px] transition-all ${on?t.line+" ring-1 "+t.soft:"border-line bg-white hover:"+t.line}">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${on?t.chip:"bg-wash2"}">${icon(st.icon,20,on?"#FFFFFF":t.hex)}</span>
+        <span class="flex-1 min-w-0">
+          <span class="block text-[10px] font-bold uppercase tracking-[0.12em] ${on?t.text:"text-faint"}">${st.persona}</span>
+          <span class="block text-[18px] font-bold text-ink leading-snug">${st.name}</span>
+        </span>
+        <span class="w-5 h-5 shrink-0 rounded-full border-2 flex items-center justify-center ${on?t.line+" "+t.chip:"border-faint"}">${on?'<span class="w-1.5 h-1.5 rounded-full bg-white"></span>':""}</span>
+      </div>
+      <div class="text-[15px] font-semibold text-ink2 italic leading-snug mb-3">“${st.creed}”</div>
+      <div class="mt-auto pt-3 border-t border-line text-[13px] leading-snug"><span class="font-bold text-ink2">Accepts:</span> <span class="text-muted">${st.accepts}</span></div>
+    </button>`}function stageStance(){const sel=state.profile?byId(STANCES,state.profile):null;const slides=[...STANCES.map(st=>({label:"Stance "+(STANCES.indexOf(st)+1)+" of "+STANCES.length,body:stanceSlide(st)})),{label:"Your choice",body:`<h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-2">Pick your stance</h3>
+      <p class="text-[15px] text-muted mb-6 max-w-3xl">The same evidence supports all three. What differs is what you are willing to trade.</p>
+      <div class="grid lg:grid-cols-3 gap-4 items-stretch mb-6">${STANCES.map(stancePickCard).join("")}</div>
+      <label for="stanceWhy" class="block text-[14px] font-bold ${sel?"text-ink":"text-faint"} mb-1.5">${sel?`You picked ${esc(sel.name)}. Why that one, for this company?`:"Pick a stance above, then say why you chose it."}</label>
+      <div class="text-[12.5px] text-faint mb-2.5">Optional. There is no wrong answer here. The reasoning is the point, and it goes on your pitch card.</div>
+      <textarea id="stanceWhy" data-in="stanceWhy" rows="3" placeholder="Because…" ${sel?"":"disabled"}
+        class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none ${sel?"bg-white":"bg-wash cursor-not-allowed"}">${esc(state.stanceWhy)}</textarea>`}];const last=slides.length-1;const i=Math.max(0,Math.min(state.stanceSlide,last));return`<div class="fadein">${setNav(i===0?"unintro:2":"sslide:"+(i-1),i===last?"go:"+nextStage(2,1):"sslide:"+(i+1),"Next →",slideDots(slides.length,i,"sslide"),i===last&&!sel)}
+    ${sectionHead(`Stage ${stageNo(2)} · 5 minutes`,"Pick your stance","Before you look at a single use case, decide how you intend to come at this.")}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden mb-8">
+      <div class="px-6 md:px-10 pt-7 pb-8 min-h-[440px]">
+        <div class="flex items-baseline justify-between gap-3 mb-4">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">${slides[i].label}</span>
+          <span class="text-[12px] text-faint tabular-nums">${i+1} / ${slides.length}</span>
+        </div>
+        ${slides[i].body}
+      </div>
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-4 mb-6 items-stretch">
-      ${STANCES.map(stanceCard).join("")}
-    </div>
 
-    ${sel?card(`<div class="p-5">
-      <div class="text-[14px] font-bold text-ink mb-1.5">You picked ${esc(sel.name)}. Why that one, for this company?</div>
-      <div class="text-[12.5px] text-faint mb-3">Optional. There is no wrong answer here, and no table is being steered toward one. The reasoning is the point, and it goes on your pitch card. The track record in the brief is the evidence.</div>
-      <textarea id="stanceWhy" data-in="stanceWhy" rows="3" placeholder="Because…"
-        class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none">${esc(state.stanceWhy)}</textarea>
-    </div>`):`<div class="p-5 rounded-xl bg-wash border border-line text-[13.5px] text-muted leading-relaxed">
-      Pick one of the three. You can change it later, but everything you choose after this will be read against it.</div>`}
-
-    ${stageFooter(true,"")}
   </div>`}function ideaProgress(focus,idx){const parts=focus.map(f=>({label:f.name,done:stageSettled(f.id),sub:pickForStage(f.id)?pickForStage(f.id).name||"Untitled":"Nothing chosen yet"}));return`<div class="flex items-stretch gap-2 mb-6">
     ${parts.map((pt,i)=>{const here=i===idx;return`<button data-act="istep:${i}" class="flex-1 text-left px-4 py-3 rounded-xl border transition-colors ${here?"border-teal-dark bg-teal/[0.07]":pt.done?"border-teal/40 bg-white hover:border-teal-dark":"border-line bg-wash hover:border-faint/60"}">
         <div class="flex items-center gap-2 mb-0.5">
@@ -566,24 +570,39 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
       <span class="block text-[14px] font-bold text-ink leading-snug truncate">${esc(pick?pick.name||"Untitled":"Nothing chosen")}</span>
     </span>
     <span class="text-[12px] font-semibold text-teal-dark shrink-0">Change</span>
-  </button>`}function stageIdeas(){const focus=focusStages();if(!focus.length)return`<div class="fadein">${sectionHead("Stage 3","Frame the use cases","")}
-    <div class="p-6 rounded-xl bg-wash border border-line text-[14px] text-muted">Commit to two stages at the situation stage first. The use cases are written against them.</div>
-    ${stageFooter(false,"")}</div>`;const total=focus.length;const step=Math.max(0,Math.min(state.ideaStep,total-1));const anim=state.ideaDir==="back"?"slideback":"slidein";const idx=step;const f=focus[idx];const last=idx===focus.length-1;const pick=stageSettled(f.id);const done=focus.filter(x=>stageSettled(x.id)).length;const stance=state.profile?byId(STANCES,state.profile):null;return`<div class="fadein">
-    ${sectionHead(`Stage 3 · 20 minutes · Part ${step+1} of ${total}`,"Frame the use cases","One use case for each of the two stages you chose. One decision per screen, so the table argues about one problem at a time.")}
-
-    ${ideaProgress(focus,step)}
-
-    ${idx===0?`${stance?stanceStrip(stance):""}${methodPanel(METHOD.ideas)}`:settledStrip(focus[idx-1],idx-1)}
-
-    <div class="${anim}">${stagePanel(f,idx,focus.length)}</div>
-
-    ${last?`<div class="mt-5 p-4 rounded-xl ${done===focus.length?"bg-teal/[0.07] border border-teal-dark":"bg-wash border border-line"}">
-      <div class="text-[13.5px] ${done===focus.length?"text-ink font-semibold":"text-muted"}">
-        ${done} of ${focus.length} stages have a use case.${done===focus.length?" Next you decide which of the two is worth doing first.":""}</div>
-    </div>`:""}
-
-    ${exampleToggle("s3")}
-    ${last?subFooter(step===0?"go:2":"istep:"+(step-1),"go:4","Log and continue",done!==focus.length,done===focus.length?"":pickForStage(f.id)?"Say why that example fits NordWeave to continue.":"Choose one use case for each of your two stages."):subFooter(step===0?"go:2":"istep:"+(step-1),"istep:"+(step+1),`Continue to ${focus[idx+1].name}`,!pick,pick?"":pickForStage(f.id)?"Say why that example fits NordWeave to continue.":"Choose one use case for this stage to continue.")}
+  </button>`}function ensureOwnCases(){focusStages().forEach(f=>{if(!state.customCases.some(c=>c.stage===f.id))state.customCases.push({id:"own-"+f.id,stage:f.id,name:"",does:"",doesNot:"",isCustom:true,factors:[],nodes:["input-schedule","proc-ai-agent","proc-human-review","output-notification"]})})}function picksForStage(pid){return shortlistCases().filter(u=>u.stage===pid)}function ideasDone(){return focusStages().every(f=>picksForStage(f.id).length===2)}function ideaOption(u,full){const on=state.shortlist.includes(u.id);const locked=!on&&full;return`<button data-act="pick2:${u.id}" ${locked?"disabled":""} class="text-left h-full flex flex-col p-5 rounded-2xl border-[1.5px] transition-all ${on?"border-teal-dark bg-teal/[0.07] ring-1 ring-teal-dark":locked?"border-line bg-wash/60 cursor-not-allowed opacity-60":"border-line bg-white hover:border-teal-dark"}">
+      <div class="flex items-start gap-3 mb-3">
+        <span class="text-[17px] font-bold text-ink leading-snug flex-1">${u.name}</span>
+        <span class="w-5 h-5 mt-0.5 shrink-0 rounded-md border-2 flex items-center justify-center ${on?"border-teal-dark bg-teal-dark":"border-faint"}">${on?'<span class="text-white text-[11px] font-bold leading-none">✓</span>':""}</span>
+      </div>
+      <div class="text-[14px] text-body leading-relaxed mb-3">${u.does}</div>
+      <div class="mt-auto pt-3 border-t border-line text-[13px] text-muted leading-snug"><span class="font-semibold text-ink2">Does not:</span> ${u.doesNot.replace(/^Does not /,"")}</div>
+    </button>`}function ideaOwn(c,full){const i=state.customCases.indexOf(c);const on=state.shortlist.includes(c.id);const named=c.name.trim().length>0;const locked=!on&&(full||!named);return`<div class="p-5 rounded-2xl border-[1.5px] border-dashed ${on?"border-teal-dark bg-teal/[0.07]":"border-lavd/60 bg-lav/10"}">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <span class="text-[15px] font-bold text-ink">Or suggest your own way of solving this</span>
+        <button data-act="pick2:${c.id}" ${locked?"disabled":""} class="shrink-0 px-4 py-1.5 rounded-full text-[12.5px] font-semibold border transition-colors ${on?"bg-teal-dark text-white border-teal-dark":locked?"bg-wash2 text-faint border-line cursor-not-allowed":"bg-white text-teal-dark border-teal-dark/40 hover:border-teal-dark"}">${on?"✓ One of our two":"Use as one of our two"}</button>
+      </div>
+      <div class="grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-3">
+        <input id="own-name-${i}" data-in="custname:${i}" value="${esc(c.name)}" placeholder="Name it in a few words"
+          class="w-full px-3 py-2 rounded-lg border border-lavd/50 text-[14px] font-semibold text-ink bg-white focus:border-lavd focus:outline-none" />
+        <input id="own-does-${i}" data-in="custdoes:${i}" value="${esc(c.does)}" placeholder="What would it do? Plain words are fine."
+          class="w-full px-3 py-2 rounded-lg border border-lavd/50 text-[14px] bg-white focus:border-lavd focus:outline-none" />
+      </div>
+    </div>`}function stageIdeas(){ensureOwnCases();const focus=focusStages();const total=focus.length;const step=Math.max(0,Math.min(state.ideaStep,total-1));const f=focus[step];const last=step===total-1;const picked=picksForStage(f.id);const full=picked.length>=2;const own=state.customCases.find(c=>c.stage===f.id);return`<div class="fadein">${setNav(step===0?"unintro:3":"istep:"+(step-1),last?"go:"+nextStage(3,1):"istep:"+(step+1),"Next →",slideDots(total,step,"istep"),!full)}
+    ${sectionHead(`Stage ${stageNo(3)} · 20 minutes`,"Frame the use cases","One focus area at a time. For each, pick the two use cases you would take forward.")}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="flex items-baseline justify-between gap-3 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">Focus area ${step+1} of ${total}</span>
+          <span class="text-[12.5px] font-semibold tabular-nums ${full?"text-teal-dark":"text-faint"}">${picked.length} of 2 picked</span>
+        </div>
+        <h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-2">${f.name}</h3>
+        <div class="mb-6">${problemBox(f.id,"lg")}</div>
+        <div class="text-[16px] font-bold text-ink mb-3">Pick two use cases that you think are best positioned to address this.</div>
+        <div class="grid lg:grid-cols-3 gap-4 items-stretch mb-4">${casesForStage(f.id).map(u=>ideaOption(u,full)).join("")}</div>
+        ${ideaOwn(own,full)}
+      </div>
+    </div>
   </div>`}function shortlistCases(){return state.shortlist.map(id=>allCases().find(u=>u.id===id)).filter(Boolean)}function dimensionRow(u,c,i,open){const sc=state.scores[u.id]||{};const val=sc[c.id];const held=i>open;if(held)return`<div class="flex items-center gap-3 px-4 py-3 rounded-xl border border-line bg-wash/60">
     <span class="w-6 h-6 shrink-0 rounded-full bg-line text-faint flex items-center justify-center text-[11px] font-bold">${i+1}</span>
     <span class="text-[13.5px] font-semibold text-faint flex-1">${c.name}</span>
@@ -603,112 +622,93 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
       </div>
       <span class="text-[11px] text-faint w-[118px] hidden sm:block leading-snug">${c.high}</span>
     </div>
-  </div>`}function priorScore(){const list=shortlistCases();if(!list.length)return`<div class="fadein">${sectionHead("Stage 4","Prioritise","")}
-    <div class="p-6 rounded-xl bg-wash border border-line text-[14px] text-muted">Shortlist some use cases first.</div>
-    ${subFooter("go:3","go:3","Back to the use cases",false,"")}</div>`;const idx=Math.max(0,Math.min(state.scoreIdx,list.length-1));const u=list[idx];const sc=state.scores[u.id]||{};const complete=CRITERIA.every(c=>sc[c.id]);const nextUp=CRITERIA.findIndex(c=>!sc[c.id]);const open=nextUp===-1?CRITERIA.length-1:nextUp;const last=idx===list.length-1;const stg=u.stage?byId(PROCESS.stages,u.stage):null;return`<div class="fadein">
-    ${priorProgress("score")}
-    ${sectionHead(`Stage 4 · Step 1 of 2 · Use case ${idx+1} of ${list.length}`,"Score this one","Four questions, answered one after the other. Nothing is filled in for you, and your stance decides how much each answer counts.")}
-
-    <div class="flex items-center gap-1.5 mb-5">
-      ${list.map((x,i)=>{const done=CRITERIA.every(c=>(state.scores[x.id]||{})[c.id]);return`<button data-act="sidx:${i}" title="${esc(x.name||"Untitled")}" class="flex-1 h-1.5 rounded-full transition-colors ${i===idx?"bg-teal-dark":done?"bg-teal/45 hover:bg-teal":"bg-line hover:bg-faint/50"}"></button>`}).join("")}
-    </div>
-
-    ${card(`<div class="p-6">
-      <div class="flex items-start justify-between gap-4 mb-3 flex-wrap">
-        <div class="flex-1 min-w-[240px]">
-          <div class="text-[22px] font-bold text-ink leading-snug mb-2">${esc(u.name||"Untitled use case")}</div>
-          ${u.does?`<div class="text-[14.5px] text-body leading-relaxed mb-1.5"><span class="font-semibold text-ink2">Does:</span> ${esc(u.does)}</div>`:""}
-          ${u.doesNot?`<div class="text-[14.5px] text-muted leading-relaxed"><span class="font-semibold text-ink2">Does not:</span> ${esc(u.doesNot)}</div>`:""}
-          ${stg?`<div class="text-[12px] text-faint mt-2.5">Hits stage ${stg.n} · ${stg.name}</div>`:'<div class="text-[12px] text-lavd font-semibold mt-2.5">Your own use case</div>'}
+  </div>`}function isScored(u){return CRITERIA.every(c=>(state.scores[u.id]||{})[c.id])}function rateRow(u,c){const v=(state.scores[u.id]||{})[c.id];return`<div class="flex items-center gap-3 flex-wrap">
+      <span class="w-[92px] text-[13.5px] font-semibold text-ink2">${c.name}</span>
+      <div class="flex gap-1.5">${[1,2,3,4,5].map(n=>`<button data-act="score:${u.id}:${c.id}:${n}" class="w-10 h-10 rounded-lg text-[14px] font-bold border-2 transition-colors ${v===n?"bg-teal-dark text-white border-teal-dark":"bg-white text-faint border-line hover:border-teal-dark hover:text-ink2"}">${n}</button>`).join("")}</div>
+    </div>`}function priorList(){return focusStages().flatMap(f=>picksForStage(f.id))}function priorScore(){const st=state.profile?byId(STANCES,state.profile):null;const tone=st?STANCE_TONE[st.tone]||STANCE_TONE.teal:null;const list=priorList();const idx=Math.max(0,Math.min(state.scoreIdx,list.length-1));const u=list[idx];const f=byId(PROCESS.stages,u.stage);const complete=isScored(u);const last=idx===list.length-1;const sc=state.scores[u.id]||{};return`<div class="fadein">${setNav(idx===0?"unintro:4":"sidx:"+(idx-1),last?"pstep:land":"sidx:"+(idx+1),"Next →",slideDots(list.length+1,idx,"pslide"),!complete)}
+    ${sectionHead(`Stage ${stageNo(4)} · 15 minutes`,"Prioritise","Rate each use case on two questions. The results come together on a matrix at the end.")}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="flex items-baseline justify-between gap-3 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">Use case ${idx+1} of ${list.length}<span class="text-faint"> · ${f?f.name:""}</span></span>
+          <span class="text-[12.5px] font-semibold ${complete?"text-teal-dark":"text-faint"}">${complete?"✓ Rated":CRITERIA.filter(c=>sc[c.id]).length+" of "+CRITERIA.length+" rated"}</span>
         </div>
-        <div class="text-right shrink-0">
-          <div class="text-[10px] font-bold uppercase tracking-[0.1em] text-faint mb-0.5">Score</div>
-          <div class="text-[30px] font-bold ${complete?"text-teal-dark":"text-faint/50"} tabular-nums leading-none">${complete?weightedScore(u.id).toFixed(2):"—"}</div>
-          <div class="text-[10.5px] text-faint mt-1">${CRITERIA.filter(c=>(state.scores[u.id]||{})[c.id]).length} of ${CRITERIA.length} answered</div>
-        </div>
-      </div>
-
-      <div class="border-t border-line pt-4 mt-1 space-y-3">
-        ${CRITERIA.map((c,i)=>dimensionRow(u,c,i,open)).join("")}
-      </div>
-    </div>`)}
-
-    ${idx>0?`<div class="mt-4">
-      <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint mb-2">Scored so far</div>
-      <div class="flex flex-wrap gap-2">
-        ${list.slice(0,idx).filter(x=>CRITERIA.every(c=>(state.scores[x.id]||{})[c.id])).map((x,i)=>`<button data-act="sidx:${i}" class="px-3 py-1.5 rounded-full text-[12px] border border-line bg-white text-body hover:border-teal-dark">
-            ${esc(x.name||"Untitled")} <span class="font-bold text-teal-dark tabular-nums ml-1">${weightedScore(x.id).toFixed(2)}</span></button>`).join("")}
-      </div>
-    </div>`:""}
-
-    ${subFooter(idx===0?"go:3":"sidx:"+(idx-1),last?"pstep:land":"sidx:"+(idx+1),last?"See where they land":"Next use case",!complete,complete?"":`Answer all ${CRITERIA.length} questions to continue.`)}
-  </div>`}function priorLand(){const list=shortlistCases().filter(u=>CRITERIA.every(c=>(state.scores[u.id]||{})[c.id]));const ranked=[...list].sort((a,b)=>weightedScore(b.id)-weightedScore(a.id));const plot=list.map(u=>{const sc=state.scores[u.id];const ease=(sc.feasibility+sc.adoption+sc.data)/3;return{u,x:(ease-1)/4*100,y:(sc.impact-1)/4*100,rank:ranked.findIndex(r=>r.id===u.id)+1}});const buckets={};plot.forEach(pt=>{const k=`${Math.round(pt.x/6)}:${Math.round(pt.y/6)}`;(buckets[k]=buckets[k]||[]).push(pt)});Object.values(buckets).forEach(group=>{if(group.length<2)return;group.forEach((pt,i)=>{const angle=Math.PI*2*i/group.length-Math.PI/2;pt.x=Math.max(0,Math.min(100,pt.x+Math.cos(angle)*5));pt.y=Math.max(0,Math.min(100,pt.y+Math.sin(angle)*5));pt.nudged=true})});const runnerUp=ranked.find(u=>u.id!==state.chosen);const ready=!!state.chosen&&state.rejection.trim().length>0;return`<div class="fadein">
-    ${priorProgress("land")}
-    ${sectionHead("Stage 4 · Step 2 of 2","Where they land","Now you can see the whole field. Choose the one you take forward, and say what you turned down.")}
-
-    <div class="grid lg:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
-      <div>
-        ${card(`<div class="p-5">
-          <div class="relative w-full mx-auto aspect-square bg-wash rounded-xl border border-line overflow-hidden">
-            <div class="absolute inset-0 grid grid-cols-2 grid-rows-2">
-              <div class="border-r border-b border-line p-2.5"><span class="text-[10px] font-bold uppercase tracking-wider text-faint">Big bets</span></div>
-              <div class="border-b border-line p-2.5 text-right"><span class="text-[10px] font-bold uppercase tracking-wider text-teal-dark">Top priority</span></div>
-              <div class="border-r border-line p-2.5 flex items-end"><span class="text-[10px] font-bold uppercase tracking-wider text-faint">Why bother</span></div>
-              <div class="p-2.5 flex items-end justify-end"><span class="text-[10px] font-bold uppercase tracking-wider text-faint">Low-hanging fruit</span></div>
+        <h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-2">${esc(u.name||"Untitled use case")}</h3>
+        <p class="text-[16px] text-body leading-relaxed mb-1 max-w-3xl">${esc(u.does||"")}</p>
+        <p class="text-[14px] text-muted leading-relaxed mb-4 max-w-3xl min-h-[22px]">${u.doesNot?`<span class="font-semibold text-ink2">Does not:</span> ${esc(u.doesNot.replace(/^Does not /,""))}`:""}</p>
+        <div class="mb-5 max-w-3xl">${problemBox(u.stage)}</div>
+        <div class="grid md:grid-cols-2 gap-4">
+          ${CRITERIA.map(c=>{const lens=st&&(c.id==="impact"?st.lensImpact:st.lensFeasibility);const v=sc[c.id];return`<div class="flex flex-col p-5 rounded-2xl border-[1.5px] ${v?"border-teal-dark/60 bg-teal/[0.04]":"border-line bg-wash"}">
+            <div class="text-[12px] font-bold uppercase tracking-[0.12em] text-ink2 mb-1.5">${c.name}</div>
+            <div class="text-[15px] text-ink2 leading-snug mb-3">${c.question}</div>
+            ${lens?`<div class="flex gap-2.5 mb-4">
+              <span class="w-6 h-6 shrink-0 rounded-md flex items-center justify-center ${tone.chip}">${icon(st.icon,13,"#FFFFFF")}</span>
+              <span class="text-[13px] text-ink2 leading-snug"><span class="font-bold ${tone.text}">As ${st.name}:</span> ${lens}</span>
+            </div>`:""}
+            <div class="mt-auto">
+              <div class="flex gap-2">${[1,2,3,4,5].map(n=>`<button data-act="score:${u.id}:${c.id}:${n}" class="flex-1 h-12 rounded-xl text-[16px] font-bold border-2 transition-colors ${v===n?"bg-teal-dark text-white border-teal-dark":"bg-white text-faint border-line hover:border-teal-dark hover:text-ink2"}">${n}</button>`).join("")}</div>
+              <div class="flex justify-between text-[11.5px] text-faint mt-1.5"><span>${c.low}</span><span>${c.high}</span></div>
             </div>
-            <div class="absolute inset-[30px]">
-              ${plot.map(pt=>`<div class="absolute -translate-x-1/2 translate-y-1/2" style="left:${pt.x}%; bottom:${pt.y}%">
-                <button data-act="choose:${pt.u.id}" title="${esc(pt.u.name||"Untitled")}" class="w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-bold transition-all ${state.chosen===pt.u.id?"bg-teal-dark text-white ring-4 ring-teal/30":"bg-white text-ink2 border-2 border-ink/25 hover:border-teal-dark"}">${pt.rank}</button>
-              </div>`).join("")}
-            </div>
-          </div>
-          <div class="flex justify-between text-[11px] text-faint mt-2"><span>Harder to do</span><span>Easier to do →</span></div>
-          <div class="text-[11px] text-faint">↑ More impact</div>
-          ${plot.some(pt=>pt.nudged)?`<div class="text-[11px] text-faint mt-2 pt-2 border-t border-line">Some options scored the same. They are spread slightly here so none is hidden.</div>`:""}
-        </div>`)}
-      </div>
-
-      <div>
-        ${card(`<div class="p-5">
-          <div class="text-[10px] font-bold uppercase tracking-[0.1em] text-faint mb-1">The overall score</div>
-          <div class="text-[15px] font-bold text-ink mb-1 leading-snug">Your four answers, read through your stance</div>
-          <div class="text-[12.5px] text-faint mb-4 leading-snug">Click one to take it forward.</div>
-          <div class="space-y-2.5">
-            ${ranked.map((u,i)=>{const on=state.chosen===u.id;const sc=state.scores[u.id]||{};return`<button data-act="choose:${u.id}" class="w-full p-3.5 rounded-xl border text-left transition-colors ${on?"border-teal-dark bg-teal/[0.07]":"border-line bg-white hover:border-teal"}">
-                <div class="flex items-center gap-3 mb-2">
-                  <span class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-[12px] font-bold ${on?"bg-teal-dark text-white":"bg-wash2 text-muted"}">${i+1}</span>
-                  <span class="flex-1 min-w-0 text-[14.5px] font-semibold text-ink leading-snug">${esc(u.name||"Untitled")}</span>
-                  <span class="text-[22px] font-bold text-teal-dark tabular-nums shrink-0 leading-none">${weightedScore(u.id).toFixed(2)}</span>
-                </div>
-                <div class="flex gap-1 pl-10">
-                  ${CRITERIA.map(c=>`<span class="flex-1">
-                    <span class="block text-[9.5px] text-faint leading-none mb-1 truncate">${c.name}</span>
-                    <span class="block h-1.5 rounded-full bg-line overflow-hidden">
-                      <span class="block h-full rounded-full ${on?"bg-teal-dark":"bg-faint/50"}" style="width:${(sc[c.id]||0)/5*100}%"></span></span>
-                  </span>`).join("")}
-                </div>
-                ${i===0&&!on?'<div class="text-[11.5px] text-yeld font-semibold mt-2 pl-10">Top scorer under your weights</div>':""}
-                ${on?'<div class="text-[11.5px] text-teal-dark font-semibold mt-2 pl-10">Taking this one forward</div>':""}
-              </button>`}).join("")}
-          </div>
-        </div>`)}
-        <div class="mt-5">
-      ${state.chosen?card(`<div class="p-5">
-        <div class="text-[14px] font-bold text-ink mb-1.5 leading-snug">You had ${list.length} options. Why did you turn down ${esc((runnerUp||{}).name||"the others")}?</div>
-        <div class="text-[12.5px] text-faint mb-2.5">Optional. What you decided not to do is half the decision, and it is scored.</div>
-        <textarea id="rejection" data-in="rejection" rows="4" placeholder="Because…" class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none">${esc(state.rejection)}</textarea>
-        ${ranked.length&&state.chosen!==ranked[0].id?`<div class="mt-2.5 p-3 rounded-lg bg-yel/40 border border-yeld/50 text-[12.5px] text-ink2 leading-snug">
-          Under your own weights, <span class="font-semibold">${esc(ranked[0].name)}</span> scores higher. Going against your own scoring can be the right call, but you will be asked about it.</div>`:""}
-      </div>`):`<div class="p-5 rounded-xl bg-wash border border-line text-[13.5px] text-muted leading-relaxed">
-        Pick one from the matrix or from the scores on the right. Then tell us what you turned down.</div>`}
+          </div>`}).join("")}
         </div>
       </div>
     </div>
-
-    <div class="mt-6">${exampleToggle("s4")}</div>
-
-    ${subFooter("pstep:scoreLast","go:5","Log and continue",!ready,ready?"":"Choose one, and write why you rejected the runner-up.")}
-  </div>`}function stagePrior(){if(state.priorStep==="land")return priorLand();return priorScore()}function generateMap(){const uc=allCases().find(u=>u.id===state.chosen);if(!uc)return;const seq=[],why=[],seen=new Set;const add=(nodeId,reason)=>{if(!nodeId||!NODE_MAP[nodeId]||seen.has(nodeId))return;seen.add(nodeId);seq.push(nodeId);if(reason)why.push({node:NODE_MAP[nodeId].name,reason})};const integ=state.integration?INTEGRATION_NODES[state.integration]:null;if(integ&&integ.input)add(integ.input,`you said it has to connect to ${state.integration}`);state.dataScopes.forEach(id=>{const scope=byId(DATA_SCOPES,id);add(SCOPE_NODES[id],scope?`you allowed it to touch ${scope.label.toLowerCase()}`:null)});(uc.nodes||["input-form","proc-ai-agent","output-email"]).forEach(n=>add(n,`part of how "${uc.name}" works`));const touchesSensitive=state.dataScopes.some(id=>(byId(DATA_SCOPES,id)||{}).sensitivity==="high");add("proc-human-review",touchesSensitive?"you allowed it to touch sensitive data, so a person signs before anything leaves":"someone stays accountable for what this produces");if(integ&&integ.output)add(integ.output,`the result goes back into ${state.integration}`);if(!seq.some(n=>NODE_MAP[n].layer==="output"))add("output-email","the result has to reach someone");const rank={input:0,processing:1,output:2};seq.sort((a,b)=>rank[NODE_MAP[a].layer]-rank[NODE_MAP[b].layer]);state.mapNodes=seq.map((nodeId,i)=>({uid:"n"+i+"-"+nodeId,nodeId}));state.mapWhy=why;state.mapBuilt=true}function mapEditable(){return state.mapVerdict==="modify"}function nodeCard(n,idx){const def=NODE_MAP[n.nodeId];const c=LAYER_COLORS[def.layer];return`<div class="relative group shrink-0" style="width:140px">
+  </div>`}const UC_COLORS=["#2C9A94","#5B6DC2","#D97B4A","#B8962E"];function ucColor(id){const i=priorList().findIndex(u=>u.id===id);return UC_COLORS[(i<0?0:i)%UC_COLORS.length]}function priorityOf(u){const sc=state.scores[u.id]||{};return(sc.impact||0)+(sc.feasibility||0)}function fmtScore(v){return Number.isInteger(v)?String(v):v.toFixed(1)}function matrixPositions(list){const pts=list.map(u=>{const sc=state.scores[u.id];return{id:u.id,x:(sc.feasibility-1)/4*100,y:(sc.impact-1)/4*100}});const MX=11,MY=12;for(let it=0;it<40;it++){let moved=false;for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j];const dx=b.x-a.x,dy=b.y-a.y;if(Math.abs(dx)<MX&&Math.abs(dy)<MY){const push=(MX-Math.abs(dx))/2+0.1;const dir=dx===0?(i%2?1:-1):Math.sign(dx);a.x-=push*dir;b.x+=push*dir;moved=true}}pts.forEach(p=>{p.x=Math.max(0,Math.min(100,p.x))});if(!moved)break}return Object.fromEntries(pts.map(p=>[p.id,p]))}function syncPriority(){const list=priorList().filter(isScored);const seed=[...list].sort((a,b)=>priorityOf(b)-priorityOf(a)||state.scores[b.id].impact-state.scores[a.id].impact);state.priorityOrder=[...state.priorityOrder.filter(id=>list.some(u=>u.id===id)),...seed.map(u=>u.id).filter(id=>!state.priorityOrder.includes(id))];state.forward=state.priorityOrder.slice(0,2);state.chosen=state.forward[0]||null}function priorLand(){const focus=focusStages();const list=priorList().filter(isScored);syncPriority();const ranked=state.priorityOrder.map(id=>list.find(u=>u.id===id));const full=state.forward.length>=2;const tone=pid=>focus.findIndex(f=>f.id===pid)===0?{dot:"bg-teal-dark",text:"text-teal-dark",line:"border-teal-dark"}:{dot:"bg-lavd",text:"text-lavd",line:"border-lavd"};return`<div class="fadein">${setNav("sidx:"+(list.length-1),"go:"+nextStage(4,1),"Next →",slideDots(list.length+1,list.length,"pslide"),!full||!state.rejection.trim())}
+    ${sectionHead(`Stage ${stageNo(4)} · 15 minutes`,"Prioritise","Rate each use case on two questions. The results come together on a matrix at the end.")}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="flex items-baseline justify-between gap-3 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">Results</span>
+          
+        </div>
+        <h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-1">Where they land</h3>
+        <p class="text-[15px] text-muted mb-6">Drag the use cases into your priority order. The top two are the ones you take forward.</p>
+        <div class="grid xl:grid-cols-[minmax(0,1fr)_400px] gap-8 items-start">
+          <div class="flex gap-2">
+            <div class="flex items-center"><span class="text-[11px] font-semibold text-faint [writing-mode:vertical-rl] rotate-180">Impact →</span></div>
+            <div class="flex-1">
+              <div data-matrix class="relative w-full aspect-[4/3] bg-wash rounded-xl border border-line">
+                <div class="absolute inset-0 grid grid-cols-2 grid-rows-2 rounded-xl overflow-hidden">
+                  <div class="border-r border-b border-line p-3"><span class="text-[10.5px] font-bold uppercase tracking-wider text-faint" data-q>Big bets</span></div>
+                  <div class="border-b border-line p-3 text-right bg-teal/[0.06]"><span class="text-[10.5px] font-bold uppercase tracking-wider text-teal-dark" data-q>Top priority</span></div>
+                  <div class="border-r border-line p-3 flex items-end"><span class="text-[10.5px] font-bold uppercase tracking-wider text-faint" data-q>Deprioritise</span></div>
+                  <div class="p-3 flex items-end justify-end"><span class="text-[10.5px] font-bold uppercase tracking-wider text-faint" data-q>Quick wins</span></div>
+                </div>
+                <div class="absolute top-[64px] bottom-[60px] left-[38px] right-[38px]">
+                  ${(()=>{const pos=matrixPositions(list);return list.map(u=>{const on=state.forward.includes(u.id);const p=pos[u.id];const rank=state.priorityOrder.indexOf(u.id)+1;return`<div class="absolute -translate-x-1/2 translate-y-1/2" style="left:${p.x}%;bottom:${p.y}%">
+                    <span title="${esc(u.name||"Untitled")}" class="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold text-white shadow-sm ${on?"ring-4 ring-offset-2 ring-offset-wash":""}" style="background:${ucColor(u.id)};${on?"--tw-ring-color:"+ucColor(u.id)+"55":""}">${rank}</span>
+                  </div>`}).join("")})()}
+                </div>
+              </div>
+              <div class="text-[11px] font-semibold text-faint text-right mt-1.5">Feasibility →</div>
+            </div>
+          </div>
+          <div>
+            <div class="text-[14px] font-bold text-ink mb-3">Your priority order</div>
+            <div class="space-y-2 mb-5">
+              ${ranked.map((u,i)=>{const t=tone(u.stage);const on=i<2;const sc=state.scores[u.id];return`${i===0?'<div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-1.5">Taking forward</div>':""}${i===2?'<div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint pt-3 mb-1.5 border-t border-dashed border-line">Not this time</div>':""}<div draggable="true" data-drag="${u.id}" class="flex items-center gap-3 p-3.5 rounded-xl border cursor-grab active:cursor-grabbing select-none transition-shadow ${on?"border-teal-dark bg-teal/[0.06] ring-1 ring-teal-dark":"border-line bg-white hover:border-faint"}">
+                <span class="shrink-0 text-faint">${icon("GripVertical",18,"#A0AEC0")}</span>
+                <span class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style="background:${ucColor(u.id)}">${i+1}</span>
+                <span class="flex-1 min-w-0">
+                  <span class="block text-[14px] font-semibold text-ink leading-snug">${esc(u.name||"Untitled")}</span>
+                  <span class="block text-[11.5px] text-faint">Impact ${fmtScore(sc.impact)} · Feasibility ${fmtScore(sc.feasibility)}</span>
+                </span>
+                <button data-act="mx:${u.id}" draggable="false" title="Show details" class="shrink-0 w-8 h-8 rounded-full border border-line bg-white text-ink2 hover:border-teal-dark flex items-center justify-center text-[12px] transition-transform ${state.matrixOpen===u.id?"rotate-180":""}">▾</button>
+              </div>${state.matrixOpen===u.id?`<div class="-mt-1 mb-1 mx-1 p-4 rounded-b-xl border border-t-0 border-line bg-white">
+                <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] mb-1" style="color:${ucColor(u.id)}">${(byId(PROCESS.stages,u.stage)||{}).name||"Your own use case"}</div>
+                ${u.does?`<div class="text-[13px] text-body leading-snug mb-1.5">${esc(u.does)}</div>`:""}
+                ${u.doesNot?`<div class="text-[12.5px] text-muted leading-snug mb-2.5"><span class="font-semibold text-ink2">Does not:</span> ${esc(u.doesNot.replace(/^Does not /,""))}</div>`:""}
+                ${problemBox(u.stage)}
+              </div>`:""}`}).join("")}
+            </div>
+            <label for="rejection" class="block text-[13.5px] font-bold text-ink mb-1">Why these two use cases over the others? <span class="text-peachd" aria-label="required">*</span></label>
+            <div class="text-[12px] text-faint mb-2">Required. It goes on your pitch card, and what you turned down is half the decision.</div>
+            <textarea id="rejection" data-in="rejection" rows="3" placeholder="Because…" class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed bg-white focus:border-teal-dark focus:outline-none">${esc(state.rejection)}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`}function stagePrior(){if(state.priorStep==="land")return priorLand();return priorScore()}function generateMap(){const uc=allCases().find(u=>u.id===state.chosen);if(!uc)return;const seq=[],seen=new Set;const add=id=>{if(!id||!NODE_MAP[id]||seen.has(id))return;seen.add(id);seq.push(id)};const own=uc.nodes||["input-form","proc-ai-agent","output-email"];own.forEach(add);state.dataScopes.forEach(id=>{const n=SCOPE_NODES[id];if(n==="input-database"&&own.includes("input-database"))return;add(n)});add("proc-human-review");const integ=state.integration?INTEGRATION_NODES[state.integration]:null;if(!seq.some(n=>NODE_MAP[n].layer==="output"))add(integ&&integ.output||"output-email");const rank={input:0,processing:1,output:2};seq.sort((x,y)=>rank[NODE_MAP[x].layer]-rank[NODE_MAP[y].layer]);state.mapNodes=seq.map((nodeId,i)=>({uid:"n"+i+"-"+nodeId,nodeId}));state.mapProposed=[...seq];state.mapWhy=[];state.mapBuilt=true}function mapEditable(){return state.mapVerdict==="modify"}function nodeCard(n,idx){const def=NODE_MAP[n.nodeId];const c=LAYER_COLORS[def.layer];return`<div class="relative group shrink-0" style="width:140px">
     <div style="height:72px;background:#fff;border-radius:8px;overflow:hidden;
       border:${def.human?"2px solid #2C9A94":"1px solid #E2E8F0"};box-shadow:0 1px 3px rgba(0,0,0,0.06)">
       <div style="height:6px;background:${c.band};border-radius:8px 8px 0 0"></div>
@@ -734,25 +734,19 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
         </div>
       </div>
       ${ci<CLUSTERS.length-1?`<div class="flex justify-center py-1.5">${icon("ArrowDown",20,"#A0AEC0")}</div>`:""}
-    </div>`}).join("")}function nodeLibrary(){if(!state.libOpen)return"";const inMap=new Set(state.mapNodes.map(n=>n.nodeId));const nodes=NODE_LIBRARY.filter(n=>n.layer===state.libTab);return`<div class="mt-4 rounded-xl border border-line bg-white overflow-hidden fadein">
-    <div class="flex items-center justify-between px-4 pt-4 pb-2">
-      <span class="text-[15px] font-bold text-ink">Add a step</span>
+    </div>`}).join("")}const SHORT_LIBRARY=["input-transcript","input-chat","input-form","input-schedule","input-database","proc-ai-agent","proc-summarizer","proc-classifier","proc-validator","proc-translate","proc-human-review","output-notification","output-database","output-word","output-email","output-dashboard"];function nodeLibrary(){if(!state.libOpen)return"";const inMap=new Set(state.mapNodes.map(n=>n.nodeId));return`<div class="mt-2 mb-4 p-4 rounded-xl border border-line bg-white fadein">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-[14px] font-bold text-ink">Add a step</span>
       <button data-act="libclose" class="text-faint hover:text-ink text-[18px] leading-none">×</button>
     </div>
-    <div class="flex gap-2 px-4 pb-3 flex-wrap">
-      ${CLUSTERS.map(cl=>{const c=LAYER_COLORS[cl.id],on=state.libTab===cl.id;return`<button data-act="libtab:${cl.id}" class="text-[12px] px-3 py-1 rounded-full transition-all"
-          style="background:${on?c.bg:"transparent"};color:${on?c.dark:"#718096"};font-weight:${on?600:400};border:1px solid ${on?c.border:"#E2E8F0"}">${cl.name}</button>`}).join("")}
-    </div>
-    <div class="max-h-[260px] overflow-y-auto border-t border-line">
-      ${nodes.map(def=>{const c=LAYER_COLORS[def.layer],already=inMap.has(def.nodeId);return`<button data-act="addnode:${def.nodeId}" ${already?"disabled":""}
-          class="w-full flex items-start gap-3 px-4 py-2.5 text-left border-b border-line last:border-0 ${already?"opacity-40 cursor-not-allowed":"hover:bg-wash"}">
-          <span class="mt-0.5">${icon(def.icon,18,c.dark)}</span>
-          <span class="flex-1 min-w-0">
-            <span class="block text-[13px] font-semibold text-ink2">${def.name}${already?' <span class="text-[11px] font-normal text-faint">already in your map</span>':""}</span>
-            <span class="block text-[12px] text-muted leading-snug">${def.description}</span>
-          </span>
-        </button>`}).join("")}
-    </div>
+    <div class="grid md:grid-cols-3 gap-4">${CLUSTERS.map(cl=>{const c=LAYER_COLORS[cl.id];return`<div>
+        <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] mb-2" style="color:${c.dark}">${STEP_ROLE[cl.id]}</div>
+        <div class="space-y-1.5">${SHORT_LIBRARY.map(id=>NODE_MAP[id]).filter(d=>d&&d.layer===cl.id).map(d=>{const already=inMap.has(d.nodeId);return`<button data-act="addnode:${d.nodeId}" ${already?"disabled":""} title="${esc(d.description)}" class="w-full flex items-start gap-2 px-2.5 py-2 rounded-lg border text-left ${already?"opacity-40 cursor-not-allowed border-line":"border-line hover:border-teal-dark"}" style="background:${already?"#fff":c.bg}">
+            <span class="mt-0.5">${icon(d.icon,15,c.dark)}</span>
+            <span class="flex-1 min-w-0"><span class="block text-[12.5px] font-semibold text-ink2 leading-tight">${d.name}${already?' <span class="font-normal text-faint">· added</span>':""}</span>
+            <span class="block text-[11.5px] text-muted leading-snug">${d.description}</span></span>
+          </button>`}).join("")}</div>
+      </div>`}).join("")}</div>
   </div>`}function stepCard(n,title,subtitle,done,locked,lockedMsg,body){return`<div class="rounded-2xl transition-all" style="background:${locked?"#FAFBFC":"#FFFFFF"};
     border:${done?"1px solid #38B2AC88":"1px solid #E2E8F0"};padding:${locked?"16px 24px":"24px 28px"};opacity:${locked?.7:1}">
     <div class="flex items-center gap-3" style="margin-bottom:${locked?0:20}px">
@@ -771,180 +765,158 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
     <div style="width:3px;height:24px;border-radius:2px;background:repeating-linear-gradient(to bottom,#38B2AC 0px,#38B2AC 4px,transparent 4px,transparent 8px)"></div>
     <div class="flex items-center justify-center rounded-full" style="width:28px;height:28px;background:#38B2AC20;border:2px solid #38B2AC;margin-top:2px">
       ${icon("ArrowDown",14,"#38B2AC")}</div>
-  </div>`}function stageBuild(){const uc=allCases().find(u=>u.id===state.chosen);if(!uc)return`<div class="fadein">${sectionHead("Stage 5","Build","")}
-    <div class="p-6 rounded-xl bg-wash border border-line text-[14px] text-muted">Choose a use case at the prioritise stage first.</div>${stageFooter(false,"")}</div>`;const answered=!!state.owner&&state.dataScopes.length>0&&!!state.integration;const focus=focusStages();const humanCount=state.mapNodes.filter(n=>NODE_MAP[n.nodeId].human).length;const step1=`
-    <div class="rounded-xl border border-line bg-wash p-5 mb-6">
-      <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint mb-2">Carried forward from your decisions</div>
-      <div class="text-[19px] font-bold text-ink leading-snug mb-2">${esc(uc.name||"Untitled use case")}</div>
-      ${uc.does?`<div class="text-[14px] text-body leading-relaxed mb-1"><span class="font-semibold text-ink2">Does:</span> ${esc(uc.does)}</div>`:""}
-      ${uc.doesNot?`<div class="text-[14px] text-muted leading-relaxed mb-3"><span class="font-semibold text-ink2">Does not:</span> ${esc(uc.doesNot)}</div>`:""}
-      <div class="flex flex-wrap gap-x-6 gap-y-1.5 pt-3 border-t border-line text-[12.5px]">
-        ${focus.length?`<span class="text-muted">Against <span class="font-semibold text-ink2">${focus.map(f=>f.name).join(" and ")}</span></span>`:""}
-        ${uc.stage?`<span class="text-muted">Sits in <span class="font-semibold text-ink2">${byId(PROCESS.stages,uc.stage).name}</span></span>`:'<span class="text-lavd font-semibold">Your own use case</span>'}
-        ${state.profile?`<span class="text-muted">Chosen as a <span class="font-semibold text-ink2">${byId(PRIORITY_PROFILES,state.profile).name.toLowerCase()}</span></span>`:""}
+  </div>`}function lcFirst(t){return t?t.charAt(0).toLowerCase()+t.slice(1):""}function listJoin(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+", and "+a[a.length-1]}function stepStory(nodeId,uc){const own=(STEP_STORY[uc.id]||{})[nodeId];if(own)return own;const sys=state.integration&&!/^None/.test(state.integration)?state.integration:"SuccessFactors";const scopes=state.dataScopes.filter(id=>SCOPE_NODES[id]===nodeId).map(id=>byId(DATA_SCOPES,id).label.toLowerCase());const sensitive=state.dataScopes.some(id=>(byId(DATA_SCOPES,id)||{}).sensitivity==="high");const T={"input-transcript":"It starts from the notes of a one-to-one, captured only when both people agree.","input-chat":"It picks up messages in Microsoft Teams, where the one-to-ones actually happen.","input-database":`It reads ${scopes.length?listJoin(scopes):"the records it needs"} from ${sys==="Microsoft Teams"?"SuccessFactors":sys}.`,"input-excel":`It reads ${scopes.length?listJoin(scopes):"data"} from the spreadsheets where it is kept today.`,"input-crm":`It starts when an employee's record changes in ${sys}.`,"input-schedule":"It runs automatically on a set schedule, for example every week.","proc-ai-agent":uc.does?`AI does the main job of ${uc.name}: it ${lcFirst(uc.does).replace(/\.$/,"")}.`:`AI does the main job of ${uc.name||"your use case"}.`,"proc-summarizer":"AI condenses the information into the few points that matter.","proc-classifier":"AI sorts each item into the categories you have agreed.","proc-validator":"It checks for gaps and flags anything missing before going further.","proc-merge":"It brings the information from each source together.","proc-human-review":sensitive?"A person checks and approves the result before anyone else sees it, because it touches sensitive data.":"A person checks and approves the result before anyone else sees it.","output-database":`The result is saved to the employee's record in ${sys==="Microsoft Teams"?"SuccessFactors":sys}.`,"output-crm":`The result is saved to the employee's record in ${sys}.`,"output-notification":sys==="Microsoft Teams"?"The right person gets a message about it in Microsoft Teams.":"The right person gets a prompt that something needs their attention.","output-slack":"The result is sent to the person in Microsoft Teams.","output-email":"The result is emailed to the people who need it.","output-word":"It produces an editable draft that someone finishes."};return T[nodeId]||NODE_MAP[nodeId].description}const STEP_ROLE={input:"What starts it",processing:"What happens",output:"Where it ends up"};function buildBanner(uc){const ids=buildIds();const rank=ids.indexOf(uc.id);return`<div class="mb-5 p-5 rounded-2xl border-[1.5px] border-teal-dark bg-teal/[0.06]">
+      <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-1">You are building use case ${rank+1} of ${ids.length}</div>
+      <div class="text-[22px] font-bold text-ink leading-snug mb-1">${esc(uc.name||"Untitled use case")}</div>
+      ${uc.does?`<div class="text-[14.5px] text-body leading-relaxed mb-3">${esc(uc.does)}</div>`:""}
+      ${problemBox(uc.stage)}
+    </div>`}function buildStory(uc){const edit=state.mapVerdict==="modify";const order=state.mapNodes.map(n=>n.uid);return CLUSTERS.map((cl,ci)=>{const c=LAYER_COLORS[cl.id];const nodes=state.mapNodes.filter(n=>NODE_MAP[n.nodeId].layer===cl.id);return`<div>
+      <div class="rounded-xl border overflow-hidden" style="border-color:${c.border};background:${c.bg}">
+        <div class="flex items-center gap-2.5 px-4 py-2.5 flex-wrap" style="background:${c.band}">
+          <span class="text-[11px] font-bold uppercase tracking-[0.1em]" style="color:${c.dark}">${cl.name}</span>
+          <span class="text-[11.5px]" style="color:${c.dark};opacity:.8">${cl.hint}</span>
+        </div>
+        <div class="p-4">
+          ${nodes.length?`<div class="flex items-stretch gap-2 flex-wrap">
+            ${nodes.map((n,i)=>{const def=NODE_MAP[n.nodeId];return`<div draggable="true" data-drag="${n.uid}" data-group="layer-${cl.id}" data-axis="x" title="Drag to reorder within this section" class="relative w-[250px] shrink-0 flex flex-col rounded-lg bg-white overflow-hidden cursor-grab active:cursor-grabbing select-none transition-shadow" style="border:${def.human?"2px solid #2C9A94":"1px solid #E2E8F0"};box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+                <div style="height:6px;background:${c.band}"></div>
+                <div class="p-3.5 flex-1">
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span class="shrink-0 -ml-1">${icon("GripVertical",14,"#A0AEC0")}</span>
+                    <span class="w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[11px] font-bold ${def.human?"bg-teal-dark text-white":"bg-wash2 text-ink2"}">${order.indexOf(n.uid)+1}</span>
+                    ${icon(def.icon,17,def.human?"#2C9A94":c.dark)}
+                    <span class="text-[13.5px] font-bold text-ink leading-tight flex-1 min-w-0">${def.name}</span>
+                    ${edit?`<button data-act="delnode:${n.uid}" title="Remove this step" class="w-6 h-6 shrink-0 rounded-full border border-line text-faint hover:border-peachd hover:text-peachd text-[13px] leading-none">×</button>`:""}
+                  </div>
+                  ${def.human?'<div class="text-[9.5px] font-bold uppercase tracking-wider text-teal-dark mb-1">A person checks</div>':""}
+                  <div class="text-[13px] text-ink2 leading-snug">${stepStory(n.nodeId,uc)}</div>
+                </div>
+              </div>${i<nodes.length-1?`<div class="flex items-center shrink-0">${icon("ArrowRight",18,"#A0AEC0")}</div>`:""}`}).join("")}
+          </div>`:`<div class="text-[13px] text-muted py-2">Nothing here yet.</div>`}
+        </div>
       </div>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-5">
-      <div>
-        <div class="text-[13.5px] font-bold text-ink mb-1">Who owns it?</div>
-        <div class="text-[12px] text-faint mb-3">Not who builds it. Who is accountable when it is wrong.</div>
-        <div class="flex flex-wrap gap-2">${OWNERS.map(o=>pill(o,state.owner===o,"owner:"+encodeURIComponent(o))).join("")}</div>
-      </div>
-      <div>
-        <div class="text-[13.5px] font-bold text-ink mb-1">What must it connect to?</div>
-        <div class="text-[12px] text-faint mb-3">Replacing the ATS is off the table.</div>
-        <div class="flex flex-wrap gap-2">${INTEGRATIONS.map(i=>pill(i,state.integration===i,"integ:"+encodeURIComponent(i))).join("")}</div>
-      </div>
-      <div>
-        <div class="text-[13.5px] font-bold text-ink mb-1">What data may it touch?</div>
-        <div class="text-[12px] text-faint mb-3">Each one you tick adds a step to the map.</div>
-        <div class="space-y-1.5">${DATA_SCOPES.map(d=>{const on=state.dataScopes.includes(d.id);return`<button data-act="scope:${d.id}" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg border text-left transition-colors ${on?"border-teal-dark bg-teal/[0.07]":"border-line bg-white hover:border-teal/60"}">
-            <span class="w-4 h-4 rounded border-2 shrink-0 flex items-center justify-center ${on?"bg-teal-dark border-teal-dark":"border-line"}">${on?'<span class="text-white text-[9px] font-bold">✓</span>':""}</span>
-            <span class="text-[13px] text-ink2 flex-1">${d.label}</span>
-            ${d.sensitivity==="high"?'<span class="text-[9.5px] font-bold uppercase px-1.5 py-0.5 rounded bg-peach/60 text-peachd">sensitive</span>':""}
-          </button>`}).join("")}</div>
-      </div>
-      <div>
-        <div class="text-[13.5px] font-bold text-ink mb-1">Anything you want to add?</div>
-        <div class="text-[12px] text-faint mb-3">Optional. Constraints, worries, anything the map should respect.</div>
-        <textarea id="buildNote" data-in="buildNote" rows="7" placeholder="What we would insist on…"
-          class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none">${esc(state.buildNote)}</textarea>
-      </div>
-    </div>
-
-    <div class="mt-6 pt-5 border-t border-line flex items-center justify-between gap-4 flex-wrap">
-      <div class="text-[13px] text-faint">The platform will propose a process from your answers. You do not have to accept it.</div>
-      ${primaryBtn(state.mapBuilt?"Propose it again":"See what the platform proposes","genmap")}
-    </div>`;const v=state.mapVerdict;const VERDICTS=[{id:"accept",label:"Accept it as proposed",sub:"This is roughly the shape. We would build this.",tone:"teal"},{id:"modify",label:"Modify it",sub:"Close, but steps are missing or do not belong.",tone:"lav"},{id:"decline",label:"Decline it",sub:"This is the wrong shape for what we meant.",tone:"peach"}];const VT={teal:{on:"border-teal-dark bg-teal/[0.08] ring-1 ring-teal-dark",dot:"bg-teal-dark",txt:"text-teal-dark"},lav:{on:"border-lavd bg-lav/25 ring-1 ring-lavd",dot:"bg-lavd",txt:"text-lavd"},peach:{on:"border-peachd bg-peach/25 ring-1 ring-peachd",dot:"bg-peachd",txt:"text-peachd"}};const step2=`
-    <div class="mb-5 p-4 rounded-xl border-[1.5px] border-lavd/50 bg-lav/10">
-      <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-lavd mb-1.5">A proposal, not an instruction</div>
-      <div class="text-[14px] text-ink2 leading-relaxed">The platform drew this from your four answers. You are not expected to draw a workflow. You are expected to say whether this one is right, and you are allowed to say no.</div>
-    </div>
-
-    ${state.mapWhy.length?`<div class="rounded-xl border border-teal/40 bg-teal/[0.06] p-4 mb-5">
-      <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-teal-dark mb-2">Why these steps are here</div>
-      <div class="grid sm:grid-cols-2 gap-x-6 gap-y-1">
-        ${state.mapWhy.map(w=>`<div class="text-[12.5px] text-body leading-snug">
-          <span class="font-semibold text-ink2">${w.node}</span> — ${w.reason}</div>`).join("")}
-      </div>
-    </div>`:""}
-
-    ${processMap()}
-
-    <div class="mt-5 pt-4 border-t border-line">
-      <div class="text-[13.5px] font-bold text-ink mb-1">Is this the right shape?</div>
-      <div class="text-[12.5px] text-faint mb-3">${state.mapNodes.length} steps${humanCount?`, ${humanCount} of them a human`:", none of them a human"}.${!humanCount?" On a high-risk process, no human checkpoint is itself a decision.":""}</div>
-      <div class="grid sm:grid-cols-3 gap-2.5">
-        ${VERDICTS.map(x=>{const on=v===x.id,t=VT[x.tone];return`<button data-act="verdict:${x.id}" class="text-left p-3.5 rounded-xl border-[1.5px] transition-all ${on?t.on:"border-line bg-white hover:border-faint/70"}">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${on?t.dot+" border-transparent":"border-faint"}">${on?'<span class="w-1.5 h-1.5 rounded-full bg-white"></span>':""}</span>
-              <span class="text-[13.5px] font-bold text-ink leading-snug">${x.label}</span>
-            </div>
-            <div class="text-[12px] text-muted leading-snug pl-6">${x.sub}</div>
-          </button>`}).join("")}
-      </div>
-    </div>
-
-    ${v==="modify"?`<div class="mt-5 fadein">
-      <div class="text-[13px] font-semibold text-ink2 mb-2.5">Change it until it is right. Remove what does not belong, add what is missing.</div>
-      ${nodeLibrary()}
-      <div class="mt-3 flex items-center gap-4 flex-wrap">
-        <button data-act="lib:processing" class="text-[12.5px] font-semibold text-teal-dark hover:underline">Browse all ${NODE_LIBRARY.length} steps</button>
-        <button data-act="genmap" class="text-[12.5px] text-faint hover:text-ink">Reset to what was proposed</button>
-      </div>
-    </div>`:""}
-
-    ${v==="decline"?`<div class="mt-5 p-4 rounded-xl border-[1.5px] border-peachd/50 bg-peach/15 fadein">
-      <div class="text-[13.5px] font-bold text-ink mb-1">What is wrong with it?</div>
-      <div class="text-[12.5px] text-faint mb-2.5">Optional. Declining is a legitimate answer and it goes on your pitch card. Say what the platform misread, so the room can judge whether it was the tool or the brief.</div>
-      <textarea id="mapDecline" data-in="mapDecline" rows="3" placeholder="It assumed…"
-        class="w-full px-3 py-2.5 rounded-lg border border-peachd/40 bg-white text-[13.5px] leading-relaxed focus:border-peachd focus:outline-none">${esc(state.mapDecline)}</textarea>
-    </div>`:""}
-
-    ${v==="accept"?`<div class="mt-5 p-4 rounded-xl border border-teal-dark bg-teal/[0.07] text-[13.5px] text-ink2 leading-relaxed fadein">
-      Accepted as proposed. If you want to change your mind, pick modify above. ${humanCount?"You kept "+humanCount+" human checkpoint"+(humanCount>1?"s":"")+" in it, which is what makes this defensible under the AI Act.":"You accepted a flow with no human checkpoint on a high-risk process. Be ready for that question."}
-    </div>`:""}`;const verdictDone=v==="accept"||v==="modify"||v==="decline"&&state.mapDecline.trim().length>10;return`<div class="fadein">
-    ${sectionHead("Stage 5 · 20 minutes","Build","Answer four questions about how this would actually work. The platform proposes a process, and you decide whether it is right. Nobody here is drawing a workflow.")}
-    ${state.mapBuilt&&!state.buildEdit?`<div class="rounded-2xl bg-white flex items-center gap-3" style="border:1px solid #38B2AC88;padding:16px 24px">
-      <span class="shrink-0 flex items-center justify-center rounded-full" style="width:32px;height:32px;background:#38B2AC">${icon("Check",15,"#1A7A76")}</span>
-      <div class="flex-1 min-w-0">
-        <div class="text-[16px] font-bold text-ink">What you are building</div>
-        <div class="text-[13px] text-muted truncate">${esc(uc.name||"Untitled use case")}${state.owner?" · Owner: "+esc(state.owner):""}${state.integration?" · Connects to "+esc(state.integration):""}</div>
-      </div>
-      <button data-act="buildedit" class="text-[13px] font-semibold text-teal-dark hover:underline shrink-0">Edit</button>
-    </div>`:stepCard(1,"What you are building","The use case you chose, and the four decisions only you can make.",answered,false,"",step1)}
-    ${stepConnector()}
-    <div id="build-step2">${stepCard(2,"What the platform proposes","Accept it, change it, or tell us it is wrong. You are not drawing this from scratch.",verdictDone,!state.mapBuilt,'Press "See what the platform proposes" above',step2)}</div>
-    ${exampleToggle("s5")}
-    ${stageFooter(verdictDone,!state.mapBuilt?"See what the platform proposes to continue.":!v?"Accept, modify or decline the proposal to continue.":v==="decline"?"Say what is wrong with it to continue.":"")}
-  </div>`}function stageDeploy(){const ready=Object.keys(state.rollout).length>=3&&!!state.accountable&&state.successMetrics.length>=2&&!!state.pilotScope&&!!state.pilotDuration;return`<div class="fadein">
-    ${sectionHead("Stage 6 · 10 minutes","Deploy","A use case nobody rolls out is a slide. Sequence it against the constraints you were given, not against an ideal world.")}
-    <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-2.5">Step 1 · Place each step on the timeline</div>
-    <div class="space-y-1.5 mb-6">
-      ${ROLLOUT_STEPS.map(r=>{const lane=state.rollout[r.id];return`<div class="flex items-center gap-3 p-2.5 rounded-xl border ${lane?"border-teal/50 bg-teal/[0.05]":"border-line bg-white"} flex-wrap">
-          <span class="text-[13.5px] text-ink2 flex-1 min-w-[220px]">${r.label}
-            ${r.required?'<span class="ml-2 text-[9.5px] font-bold uppercase px-1.5 py-0.5 rounded bg-peach/60 text-peachd">not optional here</span>':""}</span>
-          <div class="flex gap-1.5">
-            ${TIMELINE_LANES.map(l=>`<button data-act="roll:${r.id}:${l.id}" class="px-3 py-1 rounded-full text-[11.5px] font-medium border transition-colors ${lane===l.id?"bg-teal-dark text-white border-teal-dark":"bg-white text-faint border-line hover:border-teal"}">${l.label}</button>`).join("")}
-            ${lane?`<button data-act="roll:${r.id}:none" class="px-2 py-1 text-[11.5px] text-faint hover:text-peachd">clear</button>`:""}
-          </div>
-        </div>`}).join("")}
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-5">
-      ${card(`<div class="p-5">
-        <div class="text-[13px] font-bold text-ink mb-3">Who is accountable for the rollout?</div>
-        <div class="flex flex-wrap gap-2">${OWNERS.map(o=>pill(o,state.accountable===o,"acct:"+encodeURIComponent(o))).join("")}</div>
-      </div>`)}
-
-      ${card(`<div class="p-5">
-        <div class="text-[13px] font-bold text-ink mb-1">How will you know it worked?</div>
-        <div class="text-[12px] text-faint mb-3">Pick two. Baselines are already filled in, so set a target you would defend.</div>
-        <div class="space-y-1.5">${SUCCESS_METRICS.map(m=>{const sel=state.successMetrics.find(x=>x.id===m.id);return`<div>
-            <button data-act="metric:${m.id}" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg border text-left transition-colors ${sel?"border-teal-dark bg-teal/[0.07]":"border-line bg-white hover:border-teal/60"}">
-              <span class="w-4 h-4 rounded border-2 shrink-0 flex items-center justify-center ${sel?"bg-teal-dark border-teal-dark":"border-line"}">${sel?'<span class="text-white text-[9px] font-bold">✓</span>':""}</span>
-              <span class="text-[13px] text-ink2 flex-1">${m.name}</span>
-              <span class="text-[11.5px] text-faint">${m.baseline}</span>
-            </button>
-            ${sel?`<input id="target-${m.id}" data-in="target:${m.id}" value="${esc(sel.target||"")}" placeholder="Target, e.g. 48 days by month 9"
-              class="mt-1 ml-7 w-[calc(100%-1.75rem)] px-2.5 py-1.5 rounded-lg border border-teal-dark/40 text-[12.5px] focus:border-teal-dark focus:outline-none" />`:""}
-          </div>`}).join("")}</div>
-      </div>`)}
-    </div>
-
-    <div class="mt-6">
-      <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-2.5">Step 3 · The test that makes this an MVP</div>
-      ${card(`<div class="p-5">
-        <div class="text-[14px] text-ink2 leading-relaxed mb-1">A description is not an MVP. The test is.</div>
-        <div class="text-[12.5px] text-faint mb-4">Name the smallest real version you would put in front of real people, and what result would make you walk away.</div>
-        <div class="grid md:grid-cols-2 gap-5">
+      ${ci<CLUSTERS.length-1?`<div class="flex justify-center py-1.5">${icon("ArrowDown",20,"#A0AEC0")}</div>`:""}
+    </div>`}).join("")}const BUILD_FIELDS=["owner","integration","dataScopes","mapNodes","mapBuilt","mapVerdict","mapDecline","mapProposed"];function buildIds(){return state.forward.filter(id=>allCases().some(u=>u.id===id))}function buildOf(id){if(id===state.buildActive)return Object.fromEntries(BUILD_FIELDS.map(k=>[k,state[k]]));return state.buildSaved[id]||{owner:null,integration:null,dataScopes:[],mapNodes:[],mapBuilt:false,mapVerdict:null,mapDecline:"",mapProposed:[]}}function activateBuild(id){if(state.buildActive===id){state.chosen=id;return}if(state.buildActive)state.buildSaved[state.buildActive]=JSON.parse(JSON.stringify(buildOf(state.buildActive)));const b=JSON.parse(JSON.stringify(buildOf(id)));BUILD_FIELDS.forEach(k=>state[k]=b[k]);state.libOpen=false;state.buildActive=id;state.chosen=id}function oneBuildDone(b){const v=b.mapVerdict;return b.mapBuilt&&(v==="accept"||v==="modify")}function buildDone(){const ids=buildIds();return ids.length>0&&ids.every(id=>oneBuildDone(buildOf(id)))}function firstBuildGap(){const ids=buildIds();for(let i=0;i<ids.length;i++){const b=buildOf(ids[i]);if(!oneBuildDone(b))return i*2+(b.mapBuilt?1:0)}return 0}function stageBuild(){const ids=buildIds();const bs=Math.max(0,Math.min(state.buildStep,ids.length*2-1));const bi=Math.floor(bs/2);if(ids[bi])activateBuild(ids[bi]);const uc=ids.length?allCases().find(u=>u.id===state.chosen):null;if(!uc)return`<div class="fadein">${sectionHead(`Stage ${stageNo(5)}`,"Build","")}
+    <div class="p-6 rounded-xl bg-wash border border-line text-[14px] text-muted">Put your use cases in priority order at the prioritise stage first.</div>${stageFooter(false,"")}</div>`;const answered=!!state.owner&&state.dataScopes.length>0&&!!state.integration;const step=bs%2===1&&state.mapBuilt?1:0;const total=ids.length;const v=state.mapVerdict;const humanCount=state.mapNodes.filter(n=>NODE_MAP[n.nodeId].human).length;const verdictDone=v==="accept"||v==="modify";const head=sectionHead(`Stage ${stageNo(5)} · 20 minutes`,"Build","Take your two use cases one at a time. Set each one up, then check how it would work, step by step.");if(step===0)return`<div class="fadein">${setNav(bi===0?"unintro:5":"bstep:"+(bi*2-1),"buildgo","Show how it works →",slideDots(total*2,bi*2,"bstep"),!answered)}
+    ${head}
+    ${buildBanner(uc)}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark mb-2">Use case ${bi+1} of ${total} · Set it up</div>
+        <h3 class="text-[26px] md:text-[28px] font-bold text-ink leading-tight mb-6">Three questions about ${esc(uc.name||"your use case")}</h3>
+        <div class="grid md:grid-cols-3 gap-6">
           <div>
-            <div class="text-[13px] font-semibold text-ink2 mb-2">Smallest version worth running</div>
-            <div class="space-y-1.5">${PILOT_SCOPES.map(ps=>{const on=state.pilotScope===ps.id;return`<button data-act="pscope:${ps.id}" class="w-full flex items-start gap-2.5 px-3 py-2 rounded-lg border text-left transition-colors ${on?"border-teal-dark bg-teal/[0.07]":"border-line bg-white hover:border-teal/60"}">
-                <span class="mt-1 w-3.5 h-3.5 rounded-full border-2 shrink-0 ${on?"border-teal-dark bg-teal-dark":"border-line"}"></span>
-                <span class="flex-1"><span class="block text-[13px] text-ink2">${ps.label}</span>
-                <span class="block text-[11.5px] text-faint">${ps.note}</span></span>
+            <div class="text-[14px] font-bold text-ink mb-1">1. Who is responsible for it?</div>
+            <div class="text-[12.5px] text-faint mb-3">The person accountable if it gets something wrong.</div>
+            <div class="flex flex-wrap gap-2">${OWNERS.map(o=>pill(o,state.owner===o,"owner:"+encodeURIComponent(o))).join("")}</div>
+          </div>
+          <div>
+            <div class="text-[14px] font-bold text-ink mb-1">2. Which system does it work with?</div>
+            <div class="text-[12.5px] text-faint mb-3">Where the information comes from and goes back to.</div>
+            <div class="flex flex-wrap gap-2">${INTEGRATIONS.map(i=>pill(i,state.integration===i,"integ:"+encodeURIComponent(i))).join("")}</div>
+          </div>
+          <div>
+            <div class="text-[14px] font-bold text-ink mb-1">3. What information may it use?</div>
+            <div class="text-[12.5px] text-faint mb-3">Tick everything it needs, and nothing more.</div>
+            <div class="space-y-1.5">${DATA_SCOPES.map(d=>{const on=state.dataScopes.includes(d.id);return`<button data-act="scope:${d.id}" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg border text-left transition-colors ${on?"border-teal-dark bg-teal/[0.07]":"border-line bg-white hover:border-teal/60"}">
+                <span class="w-4 h-4 rounded border-2 shrink-0 flex items-center justify-center ${on?"bg-teal-dark border-teal-dark":"border-line"}">${on?'<span class="text-white text-[9px] font-bold">✓</span>':""}</span>
+                <span class="text-[13px] text-ink2 flex-1">${d.label}</span>
+                ${d.sensitivity==="high"?'<span class="text-[9.5px] font-bold uppercase px-1.5 py-0.5 rounded bg-peach/60 text-peachd">sensitive</span>':""}
               </button>`}).join("")}</div>
           </div>
-          <div>
-            <div class="text-[13px] font-semibold text-ink2 mb-2">For how long</div>
-            <div class="flex flex-wrap gap-2 mb-4">${PILOT_DURATIONS.map(d=>pill(d,state.pilotDuration===d,"pdur:"+encodeURIComponent(d))).join("")}</div>
-            <label for="pilotWho" class="block text-[13px] font-semibold text-ink2 mb-1.5">Who tries it first</label>
-            <input id="pilotWho" data-in="pilotWho" value="${esc(state.pilotWho)}" placeholder="e.g. 40 people in HR, before any line manager is asked"
-              class="w-full mb-4 px-3 py-2 rounded-lg border border-line text-[13.5px] focus:border-teal-dark focus:outline-none" />
-            <label for="killCriterion" class="block text-[13px] font-semibold text-ink2 mb-1.5">What result would make you stop?</label>
-            <textarea id="killCriterion" data-in="killCriterion" rows="3" placeholder="If this happens, we walk away."
-              class="w-full px-3 py-2 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none">${esc(state.killCriterion)}</textarea>
-          </div>
         </div>
-      </div>`)}
+      </div>
     </div>
-
-    ${exampleToggle("s6")}
-    ${stageFooter(ready,ready?"":"Sequence three steps, name an owner, set two measures, and define the test.")}
+  </div>`;return`<div class="fadein">${setNav("bstep:"+(bi*2),bi<total-1?"bstep:"+(bi*2+2):"go:"+nextStage(5,1),"Next →",slideDots(total*2,bi*2+1,"bstep"),!verdictDone)}
+    ${head}
+    ${buildBanner(uc)}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark mb-2">Use case ${bi+1} of ${total} · How it would work</div>
+        <h3 class="text-[26px] md:text-[28px] font-bold text-ink leading-tight mb-1">What happens, step by step</h3>
+        <p class="text-[14.5px] text-muted mb-6">Built from your three answers. Drag any step to reorder it within its section. ${state.mapNodes.length} steps${humanCount?`, ${humanCount} of them a person checking`:", with no person checking anything"}.</p>
+        <div class="mb-4">${buildStory(uc)}</div>
+        <div class="mb-2 flex items-center gap-4 flex-wrap ${state.mapVerdict==="modify"?"":"invisible"}">
+          <button data-act="lib:processing" class="text-[13px] font-semibold text-teal-dark hover:underline">+ Add a step</button>
+          <button data-act="genmap" class="text-[13px] text-faint hover:text-ink">Reset to what was proposed</button>
+        </div>${state.mapVerdict==="modify"?nodeLibrary():""}
+        <div class="mt-4 pt-5 border-t border-line">
+          <div class="text-[15px] font-bold text-ink mb-3">Is this how it should work?</div>
+          <div class="grid sm:grid-cols-2 gap-2.5 mb-4">
+            ${[{id:"accept",label:"Yes, this is right"},{id:"modify",label:"I want to make changes"}].map(x=>{const on=v===x.id;return`<button data-act="verdict:${x.id}" class="flex items-center gap-2.5 p-3.5 rounded-xl border-[1.5px] text-left transition-all ${on?"border-teal-dark bg-teal/[0.07] ring-1 ring-teal-dark":"border-line bg-white hover:border-faint/70"}">
+              <span class="w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${on?"bg-teal-dark border-transparent":"border-faint"}">${on?'<span class="w-1.5 h-1.5 rounded-full bg-white"></span>':""}</span>
+              <span class="text-[14px] font-semibold text-ink leading-snug">${x.label}</span></button>`}).join("")}
+          </div>
+          <label for="mapDecline" class="block text-[13px] font-semibold text-ink2 mb-1.5">Anything you would change or worry about? <span class="font-normal text-faint">Optional.</span></label>
+          <textarea id="mapDecline" data-in="mapDecline" rows="2" placeholder="It assumed…" class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none">${esc(state.mapDecline)}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>`}function mvpCard(on,act,title,body,extra){return`<button data-act="${act}" class="text-left h-full flex flex-col p-5 rounded-2xl border-[1.5px] transition-all ${on?"border-teal-dark bg-teal/[0.07] ring-1 ring-teal-dark":"border-line bg-white hover:border-teal-dark"}">
+      <div class="flex items-start gap-3 mb-2">
+        <span class="text-[16px] font-bold text-ink leading-snug flex-1">${title}</span>
+        <span class="w-5 h-5 mt-0.5 shrink-0 rounded-full border-2 flex items-center justify-center ${on?"border-teal-dark bg-teal-dark":"border-faint"}">${on?'<span class="w-1.5 h-1.5 rounded-full bg-white"></span>':""}</span>
+      </div>
+      <div class="text-[13.5px] text-body leading-relaxed">${body}</div>
+      ${extra||""}
+    </button>`}function pilotOf(id){return state.pilot[id]||{}}function deployReady(n){const ids=buildIds();if(!ids.length)return false;if(n>=1&&!ids.every(id=>pilotOf(id).scope))return false;if(n>=2&&!ids.every(id=>pilotOf(id).measure))return false;if(n>=3&&state.risks.length<2)return false;return true}function problemOf(pid){const f=byId(PROCESS.stages,pid);return f?f.problem||f.leak:""}function problemBox(pid,size){const f=byId(PROCESS.stages,pid);if(!f)return"";const big=size==="lg";return`<div class="${big?"p-5":"p-3.5"} rounded-xl border-l-4 border-peachd bg-peach/15">
+      <div class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-peachd mb-1">What you need to address${big?"":" · "+f.name}</div>
+      <div class="${big?"text-[17px]":"text-[13.5px]"} text-ink2 leading-snug">${problemOf(pid)}</div>
+    </div>`}function mvpColumns(render){const ids=buildIds();return`<div class="grid lg:grid-cols-2 gap-6">${ids.map((id,i)=>{const u=allCases().find(x=>x.id===id);return`<div class="rounded-2xl border border-line bg-wash/50 p-5">
+        <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-1">Use case ${i+1}</div>
+        <div class="text-[18px] font-bold text-ink leading-snug mb-3">${esc(u.name||"Untitled use case")}</div>
+        <div class="mb-4">${problemBox(u.stage)}</div>
+        ${render(id,pilotOf(id))}
+      </div>`}).join("")}</div>`}function mvpRow(on,act,title,sub){return`<button data-act="${act}" class="w-full flex items-start gap-3 px-3.5 py-2.5 rounded-xl border text-left transition-colors ${on?"border-teal-dark bg-teal/[0.08] ring-1 ring-teal-dark":"border-line bg-white hover:border-teal/60"}">
+      <span class="mt-0.5 w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${on?"border-teal-dark bg-teal-dark":"border-faint"}">${on?'<span class="w-1.5 h-1.5 rounded-full bg-white"></span>':""}</span>
+      <span class="flex-1 min-w-0"><span class="block text-[14px] font-semibold text-ink2 leading-snug">${title}</span>${sub?`<span class="block text-[12px] text-faint leading-snug">${sub}</span>`:""}</span>
+    </button>`}function stanceReminder(field){const st=state.profile?byId(STANCES,state.profile):null;if(!st)return'<div class="mb-6"></div>';const t=STANCE_TONE[st.tone]||STANCE_TONE.teal;return`<div class="mt-4 mb-6 flex gap-3 p-4 rounded-xl border-[1.5px] ${t.line} ${t.soft}">
+      <span class="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center ${t.chip}">${icon(st.icon,15,"#FFFFFF")}</span>
+      <span class="text-[14px] text-ink2 leading-snug"><span class="font-bold ${t.text}">As ${st.name}:</span> ${st[field]}</span>
+    </div>`}function stageDeploy(){const step=Math.min(state.deployStep,2);const head=sectionHead(`Stage ${stageNo(6)} · 15 minutes`,"Deploy","Start small. For each use case, choose who tries it first and how you will know it worked. Then choose how you will keep both safe.");if(step===0){return`<div class="fadein">${setNav("unintro:6","dstep:1","Next →",slideDots(3,0,"dstep"),!deployReady(1))}
+    ${head}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark mb-2">Step 1 of 3</div>
+        <h3 class="text-[26px] md:text-[28px] font-bold text-ink leading-tight mb-1">Who tries it first?</h3>
+        ${stanceReminder("lensPilot")}
+        ${mvpColumns((id,p)=>`<div class="space-y-2">${PILOT_SCOPES.map(ps=>mvpRow(p.scope===ps.id,"mvp:"+id+":scope:"+ps.id,ps.label,ps.note)).join("")}</div>`)}
+      </div>
+    </div>
+  </div>`}if(step===2){const picked=state.risks.map(r=>r.id);const full=picked.length>=2;return`<div class="fadein">${setNav("dstep:1","go:"+nextStage(6,1),"Next →",slideDots(3,2,"dstep"),!full)}
+    ${head}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="flex items-baseline justify-between gap-3 mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">Step 3 of 3</span>
+          <span class="text-[12.5px] font-semibold ${full?"text-teal-dark":"text-faint"}">${picked.length} of 2 picked</span>
+        </div>
+        <h3 class="text-[26px] md:text-[28px] font-bold text-ink leading-tight mb-1">Which guardrails will you put in place?</h3>
+        <p class="text-[15px] text-muted mb-6">Pick the two that matter most across both use cases. Each one protects against a specific risk.</p>
+        <div class="grid md:grid-cols-2 gap-3">${RISKS.filter(k=>k.guard).map(k=>{const on=picked.includes(k.id);const locked=!on&&full;return`<button data-act="risk:${k.id}" ${locked?"disabled":""} class="text-left flex gap-3 p-4 rounded-xl border-[1.5px] transition-all ${on?"border-teal-dark bg-teal/[0.07] ring-1 ring-teal-dark":locked?"border-line bg-wash/60 opacity-60 cursor-not-allowed":"border-line bg-white hover:border-teal-dark"}">
+            <span class="w-5 h-5 mt-0.5 shrink-0 rounded-md border-2 flex items-center justify-center ${on?"border-teal-dark bg-teal-dark":"border-faint"}">${on?'<span class="text-white text-[11px] font-bold leading-none">✓</span>':""}</span>
+            <span class="flex-1 min-w-0">
+              <span class="block text-[14.5px] font-semibold text-ink leading-snug mb-1">${k.guard}</span>
+              <span class="block text-[12.5px] text-faint">Protects against: ${/^[A-Z]{2}/.test(k.name)?k.name:k.name.charAt(0).toLowerCase()+k.name.slice(1)}${k.locked?' <span class="ml-1 text-[9.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-peach/60 text-peachd">required by law</span>':""}</span>
+            </span>
+          </button>`}).join("")}</div>
+      </div>
+    </div>
+  </div>`}return`<div class="fadein">${setNav("dstep:0","dstep:2","Next →",slideDots(3,1,"dstep"),!deployReady(2))}
+    ${head}
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-10 pt-7 pb-8">
+        <div class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark mb-2">Step 2 of 3</div>
+        <h3 class="text-[26px] md:text-[28px] font-bold text-ink leading-tight mb-1">How will you know it worked?</h3>
+        <p class="text-[15px] text-muted mb-6">For each use case, pick the one number you would watch. Today's figure is shown on each.</p>
+        ${mvpColumns((id,p)=>`<div class="space-y-2">${MVP_MEASURES.map(mid=>{const m=byId(SUCCESS_METRICS,mid);return mvpRow(p.measure===mid,"mvp:"+id+":measure:"+mid,m.name,"Today: "+m.baseline)}).join("")}</div>`)}
+        <label for="killCriterion" class="block text-[16px] font-bold text-ink mt-8 mb-1">What result would make you stop? <span class="text-[13px] font-normal text-faint">Optional.</span></label>
+        <textarea id="killCriterion" data-in="killCriterion" rows="2" placeholder="If this happens, we walk away."
+          class="w-full px-3 py-2.5 rounded-lg border border-line text-[13.5px] leading-relaxed focus:border-teal-dark focus:outline-none">${esc(state.killCriterion)}</textarea>
+      </div>
+    </div>
   </div>`}function stageGuard(){const chosen=state.risks;const ready=chosen.length>=3&&chosen.every(r=>(r.mitigation||"").trim().length>4);return`<div class="fadein">
-    ${sectionHead("Stage 7 · 5 minutes","Guardrails","Pick the three that would actually stop this, rank them, and say what you would do about each.")}
+    ${sectionHead(`Stage ${stageNo(7)} · 5 minutes`,"Guardrails","Pick the three that would actually stop this, rank them, and say what you would do about each.")}
 
     <div class="grid md:grid-cols-2 gap-3">
       ${RISKS.map(k=>{const sel=chosen.find(r=>r.id===k.id);const rank=sel?chosen.indexOf(sel)+1:null;return`<div class="p-4 rounded-xl border ${sel?"border-teal-dark bg-teal/[0.06]":k.locked?"border-peachd/60 bg-peach/20":"border-line bg-white"}">
@@ -965,8 +937,31 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
     <div class="text-[12.5px] text-muted mt-3">${chosen.length} of 3 chosen. Order of selection is your severity ranking.</div>
     ${exampleToggle("s7")}
     ${stageFooter(ready,ready?"":"Choose three and write a mitigation against each.")}
-  </div>`}function tableCode(){const t=(state.tableName||"table").toUpperCase().replace(/[^A-Z0-9]/g,"");let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%1e4;return"HRF-"+String(h).padStart(4,"0")}function pitchBlocks(){const uc=allCases().find(u=>u.id===state.chosen);const lanes=TIMELINE_LANES.map(l=>({lane:l.label,items:ROLLOUT_STEPS.filter(r=>state.rollout[r.id]===l.id).map(r=>r.label)})).filter(x=>x.items.length);const b={situation:{title:"The situation",body:state.situationStatement??draftSituation()},usecase:{title:"What we would do",body:uc?`<span class="font-bold text-ink">${esc(uc.name)}</span>. ${esc(uc.does||"")} ${uc.doesNot?`<span class="text-muted">${esc(uc.doesNot)}</span>`:""}`:""},why:{title:"Why this and not the others",body:esc(state.rejection)},workflow:{title:"How it would run",body:state.mapBuilt?state.mapNodes.map(n=>NODE_MAP[n.nodeId].name).join(" → ")+(state.owner?` <span class="text-muted">· owned by ${esc(state.owner)}</span>`:"")+(state.integration?` <span class="text-muted">· into ${esc(state.integration)}</span>`:""):""},deploy:{title:"How we would roll it out",body:lanes.map(l=>`<span class="font-semibold text-ink2">${l.lane}:</span> ${l.items.join(", ")}`).join("<br/>")},risks:{title:"What we are watching",body:state.risks.map((r,i)=>{const k=byId(RISKS,r.id);return`<span class="font-semibold text-ink2">${i+1}. ${k?k.name:""}</span> — ${esc(r.mitigation||"no mitigation stated")}`}).join("<br/>")},test:{title:"How we would test it",body:state.pilotScope?`<span class="font-semibold text-ink2">${esc(byId(PILOT_SCOPES,state.pilotScope).label)}</span>`+(state.pilotDuration?`, over ${esc(state.pilotDuration.toLowerCase())}`:"")+(state.pilotWho.trim()?`, starting with ${esc(state.pilotWho)}`:"")+"."+(state.killCriterion.trim()?`<br/><span class="text-muted">We stop if: ${esc(state.killCriterion)}</span>`:""):""},ask:{title:"What we would measure",body:state.successMetrics.map(m=>{const s=byId(SUCCESS_METRICS,m.id);return`<span class="font-semibold text-ink2">${s?s.name:""}</span>: ${s?s.baseline:""} → ${esc(m.target||"target not set")}`}).join("<br/>")}};return b}function stagePitch(){const blocks=pitchBlocks();const sc=scorecard();return`<div class="fadein">
-    ${sectionHead("Stage 8 · 15 minutes","Pitch card / MVP","Everything you decided, assembled. This is a draft written from your inputs, not a verdict. Edit every word of it until it sounds like your argument.")}
+  </div>`}function tableCode(){const t=(state.tableName||"table").toUpperCase().replace(/[^A-Z0-9]/g,"");let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%1e4;return"HRF-"+String(h).padStart(4,"0")}function pitchCases(){return buildIds().map(id=>allCases().find(u=>u.id===id)).filter(Boolean)}function miniFlow(id){const b=buildOf(id);if(!b.mapBuilt||!b.mapNodes.length)return'<div class="text-[13px] text-faint italic">Not built yet.</div>';return`<div class="flex items-center gap-1.5 flex-wrap">${b.mapNodes.map((n,i)=>{const def=NODE_MAP[n.nodeId];const c=LAYER_COLORS[def.layer];return`${i?icon("ArrowRight",14,"#A0AEC0"):""}<span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white text-[12.5px] font-semibold text-ink" style="border:${def.human?"2px solid #2C9A94":"1px solid "+c.border};box-shadow:inset 0 3px 0 ${c.band}">${icon(def.icon,14,def.human?"#2C9A94":c.dark)}${def.name}</span>`}).join("")}</div>`}function useCaseColumns(big){const cases=pitchCases();const T=big?{name:"text-[20px]",body:"text-[14.5px]",lbl:"text-[10px]",pad:"px-5 py-4",meta:"text-[13px]",gap:"pt-2.5 mt-2.5"}:{name:"text-[19px]",body:"text-[14px]",lbl:"text-[10.5px]",pad:"p-5",meta:"text-[13px]",gap:"pt-3 mt-3"};const meta=(t,b)=>`<div><div class="${T.lbl} font-bold uppercase tracking-[0.1em] text-faint mb-0.5">${t}</div><div class="${T.meta} text-ink2 leading-snug">${b}</div></div>`;const sec=(t,b)=>`<div class="${T.gap} border-t border-line"><div class="${T.lbl} font-bold uppercase tracking-[0.1em] text-faint mb-1.5">${t}</div><div class="${T.body} text-ink2 leading-relaxed">${b}</div></div>`;return`<div class="grid md:grid-cols-2 gap-5">${cases.map((u,i)=>{const f=byId(PROCESS.stages,u.stage);const p=pilotOf(u.id);const ps=p.scope?byId(PILOT_SCOPES,p.scope):null;const m=p.measure?byId(SUCCESS_METRICS,p.measure):null;const b=buildOf(u.id);return`<div class="${T.pad} rounded-2xl border-[1.5px]" style="border-color:${UC_COLORS[i%UC_COLORS.length]}55">
+        <div class="flex items-center gap-2.5 mb-1">
+          <span class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style="background:${UC_COLORS[i%UC_COLORS.length]}">${i+1}</span>
+          <span class="${T.lbl} font-bold uppercase tracking-[0.1em] text-faint">${f?f.name:"Our own idea"}</span>
+        </div>
+        <div class="${T.name} font-bold text-ink leading-snug">${esc(u.name||"Untitled")}</div>
+        ${sec("What it does",esc(u.does||""))}
+        ${sec("How it would run",miniFlow(u.id))}
+        <div class="${T.gap} border-t border-line grid grid-cols-3 gap-3">
+          ${meta("Pilot",ps?esc(ps.label):"Not chosen")}
+          ${meta("Measure",m?`${esc(m.name)} <span class="text-muted">(${m.baseline})</span>`:"Not chosen")}
+          ${meta("Owner",b.owner?esc(b.owner):"Not named")}
+        </div>
+      </div>`}).join("")}</div>`}function pitchBlocks(){const cases=pitchCases();const focus=focusStages();const fname=u=>(byId(PROCESS.stages,u.stage)||{}).name||"our own idea";const b={situation:{title:"The situation",body:`To strengthen its leadership pipeline ahead of a major expansion, NordWeave needs to fix two parts of its performance cycle.<br/>`+focus.map(f=>`<span class="font-semibold text-ink2">${f.name}:</span> ${lcFirst(problemOf(f.id))}`).join("<br/>")},usecase:{title:"What we would do",body:cases.map((u,i)=>`<span class="font-bold text-ink">${i+1}. ${esc(u.name||"Untitled")}</span> <span class="text-muted">(${fname(u)})</span> — ${esc(u.does||"")}`).join("<br/>")},why:{title:"Why these two use cases over the others",body:esc(state.rejection)},stance:{title:"The stance we took",body:(()=>{const st=state.profile?byId(STANCES,state.profile):null;return st?`<span class="font-semibold text-ink2">${esc(st.name)}</span> — “${esc(st.creed)}”${state.stanceWhy.trim()?`<br/><span class="text-muted">${esc(state.stanceWhy)}</span>`:""}`:""})()},workflow:{title:"How they would run",body:"",graphic:true},deploy:{title:"How we would test them",body:cases.map(u=>{const p=pilotOf(u.id);const ps=p.scope?byId(PILOT_SCOPES,p.scope):null;return`<span class="font-semibold text-ink2">${esc(u.name||"Untitled")}:</span> ${ps?esc(ps.label):"not chosen"}${p.duration?", for "+esc(p.duration.toLowerCase()):""}`}).join("<br/>")+(state.killCriterion.trim()?`<br/><span class="text-muted">We stop if: ${esc(state.killCriterion)}</span>`:"")},ask:{title:"What we would measure",body:cases.map(u=>{const m=pilotOf(u.id).measure?byId(SUCCESS_METRICS,pilotOf(u.id).measure):null;return`<span class="font-semibold text-ink2">${esc(u.name||"Untitled")}:</span> ${m?`${m.name.toLowerCase()} (today: ${m.baseline})`:"not chosen"}`}).join("<br/>")},risks:{title:"Our guardrails",body:(state.killCriterion.trim()?`<span class="text-muted">We stop if: ${esc(state.killCriterion)}</span><br/>`:"")+state.risks.map(r=>`<span class="text-teal-dark font-bold">✓</span> ${esc(r.mitigation||((byId(RISKS,r.id)||{}).guard||""))}`).join("<br/>")},test:{title:"How we would test it",body:""}};return b}function pitchGroup(blocks,keys){return state.pitchOrder.filter(k=>keys.includes(k)).map((k,i,arr)=>{if(state.pitchHidden.includes(k))return"";const blk=blocks[k];const val=state.pitchEdits[k]!==void 0?esc(state.pitchEdits[k]):blk.body||'<span class="text-faint/70">Not completed</span>';return`<div class="group border-t border-line py-3.5">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint flex-1">${blk.title}</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                  ${i>0?`<button data-act="pup:${k}" class="text-[11px] text-faint hover:text-teal-dark px-1" title="Move up">↑</button>`:""}
+                  ${i<arr.length-1?`<button data-act="pdn:${k}" class="text-[11px] text-faint hover:text-teal-dark px-1" title="Move down">↓</button>`:""}
+                  <button data-act="phide:${k}" class="text-[11px] text-faint hover:text-peachd px-1" title="Hide">hide</button>
+                </span>
+              </div>
+              <div contenteditable data-edit="block:${k}" class="text-[14.5px] text-body leading-relaxed">${val}</div>
+            </div>`}).join("")}function stagePitch(){const blocks=pitchBlocks();return`<div class="fadein">
+    ${sectionHead(`Stage ${stageNo(8)} · 15 minutes`,"Pitch card / MVP","Everything you decided, assembled. This is a draft written from your inputs, not a verdict. Edit every word of it until it sounds like your argument.")}
 
     <div class="grid lg:grid-cols-[1fr_320px] gap-6">
       <div>
@@ -978,17 +973,12 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
           <div contenteditable data-edit="pitchHeadline" class="text-[26px] font-bold text-ink leading-tight mb-1 ${state.pitchHeadline?"":"text-faint/60"}">${esc(state.pitchHeadline)||"Write your headline here"}</div>
           <div class="text-[13px] text-muted mb-5 italic">${esc(state.ceoRead)||""}</div>
 
-          ${state.pitchOrder.map((k,i)=>{if(state.pitchHidden.includes(k))return"";const blk=blocks[k];const val=state.pitchEdits[k]!==void 0?esc(state.pitchEdits[k]):blk.body||'<span class="text-faint/70">Not completed</span>';return`<div class="group border-t border-line py-3.5">
-              <div class="flex items-center gap-2 mb-1.5">
-                <span class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint flex-1">${blk.title}</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                  ${i>0?`<button data-act="pup:${k}" class="text-[11px] text-faint hover:text-teal-dark px-1" title="Move up">↑</button>`:""}
-                  ${i<state.pitchOrder.length-1?`<button data-act="pdn:${k}" class="text-[11px] text-faint hover:text-teal-dark px-1" title="Move down">↓</button>`:""}
-                  <button data-act="phide:${k}" class="text-[11px] text-faint hover:text-peachd px-1" title="Hide">hide</button>
-                </span>
-              </div>
-              <div contenteditable data-edit="block:${k}" class="text-[14.5px] text-body leading-relaxed">${val}</div>
-            </div>`}).join("")}
+          ${pitchGroup(blocks,["situation","stance"])}
+          <div class="border-t border-line pt-4 pb-4">
+            <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint mb-3">Our two use cases</div>
+            ${useCaseColumns(false)}
+          </div>
+          ${pitchGroup(blocks,["why","risks"])}
         </div>`)}
 
         ${state.pitchHidden.length?`<div class="mt-3 flex items-center gap-2 flex-wrap">
@@ -1000,27 +990,7 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
       </div>
 
       <div>
-        <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-2.5">Your feedback · private to this table</div>
         ${card(`<div class="p-5">
-          ${RUBRIC_GROUPS.map(g=>`
-            <div class="mb-5 last:mb-0">
-              <div class="text-[10px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-2.5 pb-1.5 border-b border-line">${g}</div>
-              ${sc.filter(x=>byId(RUBRIC,x.id).group===g).map(x=>{const r=byId(RUBRIC,x.id);return`<div class="mb-3.5 last:mb-0">
-                  <div class="text-[13px] font-bold text-ink mb-0.5">${r.name}</div>
-                  <div class="text-[11px] text-faint mb-1">${r.question}</div>
-                  <div class="text-[12.5px] text-body leading-relaxed">${x.note}</div>
-                  ${(x.traps||[]).length?`<div class="mt-2 space-y-1.5">${x.traps.map(t=>`<div class="flex gap-1.5 text-[12px] text-peachd leading-snug">
-                    <span class="font-bold shrink-0">!</span><span>${t}</span></div>`).join("")}</div>`:""}
-                </div>`}).join("")}
-            </div>`).join("")}
-        </div>`)}
-
-        ${card(`<div class="p-4 mt-3 bg-yel/25 border-yeld/50">
-          <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-yeld mb-1.5">What would strengthen this</div>
-          <div class="text-[13px] text-ink2 leading-relaxed">${improvementPrompt()}</div>
-        </div>`)}
-
-        ${card(`<div class="p-5 mt-3">
           <div class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-faint mb-1.5">Getting this on the big screen</div>
           <div class="text-[12.5px] text-body leading-relaxed mb-3">Two ways, and the room decides which on the day.</div>
 
@@ -1043,7 +1013,7 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
           </div>
 
           <button data-act="view:present" class="w-full px-4 py-2.5 rounded-full text-[13px] font-bold bg-ink text-white hover:bg-ink/90 transition-colors">Open presentation mode</button>
-          <div class="text-[11.5px] text-faint mt-2 leading-snug">Three slides: the use case and the reasoning, the process flow, then the rollout and the risks. Arrow keys move between them.</div>
+          <div class="text-[11.5px] text-faint mt-2 leading-snug">Your whole pitch on one screen, ready for the big screen.</div>
         </div>`)}
 
         ${card(`<div class="p-4 mt-3">
@@ -1077,7 +1047,7 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
             <span class="text-[12px] text-white/50">${STAGES[t.stage].short}</span>
           </div>
           <div class="text-[11.5px] text-white/40 mb-2.5">${t.industry}</div>
-          <div class="flex gap-0.5 mb-2.5">${STAGES.map(s=>`<span class="h-1.5 flex-1 rounded-full ${s.id<=t.stage?"bg-teal":"bg-white/15"}"></span>`).join("")}</div>
+          <div class="flex gap-0.5 mb-2.5">${visibleStages().map(s=>`<span class="h-1.5 flex-1 rounded-full ${s.id<=t.stage?"bg-teal":"bg-white/15"}"></span>`).join("")}</div>
           <div class="flex items-center justify-between">
             <span class="text-[11px] ${t.ticket==="available"?"text-teal":"text-white/30"}">AI Clinic · ${t.ticket}</span>
             <button data-act="view:present" class="text-[11px] font-semibold text-white/60 hover:text-teal">Project card →</button>
@@ -1099,32 +1069,15 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
 
       <div class="mt-8"><button data-act="view:app" class="px-5 py-2.5 rounded-full text-[14px] font-medium border border-white/25 hover:border-teal hover:text-teal">← Back to the table view</button></div>
     </div>
-  </div>`}function slideFlow(){if(!state.mapBuilt||!state.mapNodes.length){return`<div class="text-[18px] text-faint">No process was proposed for this use case.</div>`}const verdictLine={accept:"Accepted as proposed.",modify:"Changed from what was proposed.",decline:"Declined: "+esc(state.mapDecline||"no reason given")}[state.mapVerdict]||"";return`<div class="flex flex-col h-full">
-    <div class="grid md:grid-cols-3 gap-4 flex-1">
-      ${CLUSTERS.map((cl,ci)=>{const c=LAYER_COLORS[cl.id];const nodes=state.mapNodes.filter(n=>NODE_MAP[n.nodeId].layer===cl.id);return`<div class="rounded-xl border overflow-hidden flex flex-col" style="border-color:${c.border}">
-          <div class="px-4 py-2.5" style="background:${c.band}">
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-white/70 flex items-center justify-center text-[11px] font-bold" style="color:${c.dark}">${ci+1}</span>
-              <span class="text-[13px] font-bold uppercase tracking-[0.08em]" style="color:${c.dark}">${cl.name}</span>
-            </div>
-            <div class="text-[11.5px] mt-0.5 pl-7" style="color:${c.dark};opacity:.8">${cl.hint}</div>
-          </div>
-          <div class="p-3.5 space-y-2 flex-1" style="background:${c.bg}">
-            ${nodes.length?nodes.map(n=>{const def=NODE_MAP[n.nodeId];return`<div class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-white border" style="border-color:${def.human?"#2C9A94":"#E2E8F0"};${def.human?"border-width:2px":""}">
-                ${icon(def.icon,18,c.dark)}
-                <span class="text-[14px] font-semibold text-ink leading-snug flex-1">${def.name}</span>
-                ${def.human?'<span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-teal-dark text-white shrink-0">Human</span>':""}
-              </div>`}).join(""):'<div class="text-[13px] text-faint italic px-1">Nothing in this stage</div>'}
-          </div>
-        </div>`}).join("")}
-    </div>
-    <div class="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-8 gap-y-2 text-[15px] text-ink2">
-      ${state.owner?`<span><span class="text-faint">Owned by</span> <span class="font-semibold">${esc(state.owner)}</span></span>`:""}
-      ${state.integration?`<span><span class="text-faint">Connects to</span> <span class="font-semibold">${esc(state.integration)}</span></span>`:""}
-      <span><span class="text-faint">Human checkpoints</span> <span class="font-semibold">${state.mapNodes.filter(n=>NODE_MAP[n.nodeId].human).length}</span></span>
-      ${verdictLine?`<span class="text-muted italic">${verdictLine}</span>`:""}
-    </div>
-  </div>`}function slideRollout(){const lanes=TIMELINE_LANES.map(l=>({l,items:ROLLOUT_STEPS.filter(r=>state.rollout[r.id]===l.id)}));if(!lanes.some(x=>x.items.length))return`<div class="text-[18px] text-faint">No rollout was sequenced.</div>`;return`<div>
+  </div>`}function slideFlow(){const cases=pitchCases();if(!cases.length)return`<div class="text-[18px] text-faint">No use cases were built.</div>`;return`<div class="grid md:grid-cols-2 gap-5">${cases.map(u=>{const b=buildOf(u.id);return`<div class="rounded-2xl border border-line p-5">
+      <div class="text-[20px] font-bold text-ink leading-snug mb-1">${esc(u.name||"Untitled")}</div>
+      <div class="text-[13px] text-muted mb-4">${(byId(PROCESS.stages,u.stage)||{}).name||"Our own idea"}</div>
+      <div class="space-y-3">${CLUSTERS.map(cl=>{const c=LAYER_COLORS[cl.id];const nodes=(b.mapNodes||[]).filter(n=>NODE_MAP[n.nodeId].layer===cl.id);return`<div class="rounded-xl overflow-hidden border" style="border-color:${c.border}">
+          <div class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.08em]" style="background:${c.band};color:${c.dark}">${cl.name}</div>
+          <div class="p-2.5 flex flex-wrap gap-1.5" style="background:${c.bg}">${nodes.length?nodes.map(n=>{const def=NODE_MAP[n.nodeId];return`<span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white text-[13px] font-semibold text-ink" style="border:${def.human?"2px solid #2C9A94":"1px solid #E2E8F0"}">${icon(def.icon,15,c.dark)}${def.name}</span>`}).join(""):'<span class="text-[12.5px] text-faint italic">Nothing here</span>'}</div>
+        </div>`}).join("")}</div>
+      ${b.owner?`<div class="mt-3 text-[13.5px] text-ink2"><span class="text-faint">Owned by</span> <span class="font-semibold">${esc(b.owner)}</span></div>`:""}
+    </div>`}).join("")}</div>`}function slideRollout(){const lanes=TIMELINE_LANES.map(l=>({l,items:ROLLOUT_STEPS.filter(r=>state.rollout[r.id]===l.id)}));if(!lanes.some(x=>x.items.length))return`<div class="text-[18px] text-faint">No rollout was sequenced.</div>`;return`<div>
     <div class="grid md:grid-cols-3 gap-4 mb-6">
       ${lanes.map(({l,items})=>`<div class="rounded-xl border border-line overflow-hidden">
         <div class="px-4 py-2.5 bg-teal-dark text-white text-[13px] font-bold uppercase tracking-wider">${l.label}</div>
@@ -1138,67 +1091,60 @@ const BUILD_STAMP="01 Oct · 16";const EMBED=new URLSearchParams(location.search
       ${state.accountable?`<span><span class="text-faint">Accountable</span> <span class="font-semibold">${esc(state.accountable)}</span></span>`:""}
       ${state.pilotScope?`<span><span class="text-faint">First test</span> <span class="font-semibold">${esc(byId(PILOT_SCOPES,state.pilotScope).label)}</span>${state.pilotDuration?", "+esc(state.pilotDuration.toLowerCase()):""}</span>`:""}
     </div>
-  </div>`}function pitchSlides(){const blocks=pitchBlocks();const val=k=>state.pitchEdits[k]!==void 0?esc(state.pitchEdits[k]):blocks[k].body||"—";const stance=state.profile?byId(STANCES,state.profile):null;const uc=allCases().find(u=>u.id===state.chosen);const pair=(t,b)=>`<div>
-    <div class="text-[12px] font-bold uppercase tracking-[0.12em] text-faint mb-1.5">${t}</div>
-    <div class="text-[17px] text-ink2 leading-relaxed">${b}</div></div>`;const s1=`<div class="flex flex-col h-full">
-    <div class="rounded-2xl border-[1.5px] border-teal-dark bg-teal/[0.06] p-6 mb-6">
-      <div class="text-[12px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-2">What we would build</div>
-      <div class="text-[30px] font-bold text-ink leading-tight mb-2.5">${esc(uc?uc.name||"Untitled use case":"No use case chosen")}</div>
-      <div class="text-[17px] text-ink2 leading-relaxed">${val("usecase")}</div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-x-10 gap-y-5 flex-1">
-      ${pair(blocks.situation.title,val("situation"))}
-      ${pair("The stance we took",stance?`<span class="font-bold text-ink">${esc(stance.name)}</span> — “${esc(stance.creed)}”<br/>
-           <span class="text-[15px] text-muted">${esc(state.stanceWhy)||""}</span>`:"—")}
-      ${pair(blocks.why.title,val("why"))}
-      ${pair("How we would know it worked",val("ask"))}
-    </div>
-  </div>`;const lanes=TIMELINE_LANES.map(l=>({l,items:ROLLOUT_STEPS.filter(r=>state.rollout[r.id]===l.id)}));const s3=`<div class="flex flex-col h-full">
-    ${lanes.some(x=>x.items.length)?`<div class="grid md:grid-cols-3 gap-4 mb-6">
-      ${lanes.map(({l,items})=>`<div class="rounded-xl border border-line overflow-hidden">
-        <div class="px-4 py-2.5 bg-teal-dark text-white text-[13px] font-bold uppercase tracking-wider">${l.label}</div>
-        <div class="p-3.5 space-y-1.5 min-h-[104px]">
-          ${items.length?items.map(r=>`<div class="flex gap-2 text-[14px] text-ink2 leading-snug">
-            <span class="text-teal-dark font-bold shrink-0">●</span><span>${r.label}</span></div>`).join(""):'<div class="text-[13px] text-faint italic">Nothing placed here</div>'}
-        </div>
-      </div>`).join("")}
-    </div>`:'<div class="text-[18px] text-faint mb-6">No rollout was sequenced.</div>'}
-
-    <div class="grid md:grid-cols-2 gap-x-10 gap-y-5 flex-1">
-      ${pair("Who owns it, and the first test",`${state.accountable?'<span class="font-semibold">'+esc(state.accountable)+"</span>. ":""}${val("test")}`)}
-      ${pair(blocks.risks.title,val("risks"))}
-    </div>
-  </div>`;return[{label:"The use case, and how we got there",body:s1},{label:"How it would run",body:slideFlow()},{label:"Rolling it out, and what we watch",body:s3}]}function presentView(){const slides=pitchSlides();const i=Math.max(0,Math.min(state.slide,slides.length-1));const sl=slides[i];return`<div class="min-h-screen bg-white flex flex-col">
-    <div class="flex-1 flex flex-col max-w-6xl w-full mx-auto px-10 py-9">
-      <div class="flex items-baseline justify-between mb-4 flex-wrap gap-3">
+  </div>`}function pitchSlides(){const blocks=pitchBlocks();const val=k=>state.pitchEdits[k]!==void 0?esc(state.pitchEdits[k]):blocks[k].body||"—";const stance=state.profile?byId(STANCES,state.profile):null;const pair=(t,b)=>`<div>
+    <div class="text-[11.5px] font-bold uppercase tracking-[0.12em] text-faint mb-1">${t}</div>
+    <div class="text-[14px] text-ink2 leading-snug">${b}</div></div>`;const one=`<div>
+      <div class="grid md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-x-8 gap-y-3 mb-4">
+        ${pair(blocks.situation.title,state.pitchEdits.situation!==void 0?val("situation"):"To strengthen its leadership pipeline ahead of a major expansion, NordWeave needs to fix two parts of its performance cycle: "+focusStages().map(f=>`<span class="font-semibold text-ink2">${f.name.toLowerCase()}</span>`).join(" and ")+".")}
+        ${pair(blocks.stance.title,val("stance"))}
+      </div>
+      ${useCaseColumns(true)}
+      <div class="grid md:grid-cols-2 gap-x-10 gap-y-3 mt-4 pt-3 border-t border-line">
+        ${pair(blocks.why.title,val("why"))}
+        ${pair(blocks.risks.title,val("risks"))}
+      </div>
+    </div>`;return[{label:"Our pitch",body:one}]}function fitPresent(){const box=document.querySelector("[data-fit-box]"),el=document.querySelector("[data-fit]");if(!box||!el)return;el.style.transform="";const k=Math.min(1,box.clientHeight/el.offsetHeight);if(k<1)el.style.transform=`scale(${Math.max(.5,k)})`}window.addEventListener("resize",()=>{if(state.view==="present")fitPresent()});function presentView(){const slides=pitchSlides();const i=Math.max(0,Math.min(state.slide,slides.length-1));const sl=slides[i];return`<div class="h-screen bg-white flex flex-col">
+    <div class="flex-1 min-h-0 overflow-hidden" data-fit-box><div data-fit class="max-w-6xl w-full mx-auto px-10 py-6 origin-top">
+      <div class="flex items-baseline justify-between mb-2 flex-wrap gap-3">
         <span class="text-[12px] font-bold uppercase tracking-[0.14em] text-teal-dark">${esc(state.tableName)} · ${COMPANY.name}</span>
         <span class="text-[12px] text-faint">${PROCESS.name} · 90 seconds</span>
       </div>
-      ${i===0?`<h1 class="text-[40px] font-bold text-ink leading-[1.1] mb-1.5">${esc(state.pitchHeadline)||"Untitled pitch"}</h1>
-        <div class="text-[17px] text-muted italic mb-6">${esc(state.ceoRead)}</div>`:`<h2 class="text-[34px] font-bold text-ink leading-tight mb-6 pb-3 border-b border-line">${sl.label}</h2>`}
-      <div class="flex-1 flex flex-col">${sl.body}</div>
-    </div>
+      <h1 class="text-[28px] font-bold text-ink leading-tight ${state.ceoRead.trim()?"":"mb-3 pb-2 border-b border-line"}">${esc(state.pitchHeadline)||"Untitled pitch"}</h1>
+      ${state.ceoRead.trim()?`<div class="text-[14px] text-muted italic mb-3 pb-2 border-b border-line">${esc(state.ceoRead)}</div>`:""}
+      <div>${sl.body}</div>
+    </div></div>
 
     <div class="border-t border-line bg-wash print:hidden">
-      <div class="max-w-6xl mx-auto px-10 py-3.5 flex items-center gap-3 flex-wrap">
+      <div class="max-w-6xl mx-auto px-10 py-2.5 flex items-center justify-between gap-3">
         ${ghostBtn("← Back to editing","view:app")}
-        <div class="flex items-center gap-1.5 mx-auto">
-          ${slides.map((x,n)=>`<button data-act="slide:${n}" class="px-3 py-1.5 rounded-full text-[12px] font-semibold transition-colors ${n===i?"bg-teal-dark text-white":"text-faint hover:text-ink2"}">${n+1}. ${esc(x.label)}</button>`).join("")}
-        </div>
-        <span class="text-[12.5px] text-faint tabular-nums">${i+1} / ${slides.length}</span>
-        <button data-act="slide:${i-1}" ${i===0?"disabled":""} class="px-3.5 py-2 rounded-full text-[13px] font-semibold border border-line ${i===0?"text-faint/50 cursor-not-allowed":"text-ink2 hover:border-teal-dark"}">Prev</button>
-        <button data-act="slide:${i+1}" ${i===slides.length-1?"disabled":""} class="px-4 py-2 rounded-full text-[13px] font-bold ${i===slides.length-1?"bg-wash2 text-faint cursor-not-allowed":"bg-teal-dark text-white hover:bg-teal-dark/90"}">Next</button>
+        <button data-act="printpitch" class="px-4 py-2 rounded-full text-[13px] font-semibold border border-line text-ink2 hover:border-teal-dark">Save as PDF</button>
       </div>
     </div>
-  </div>`}function stageBody(){switch(state.stage){case 0:return stageBrief();case 1:return stageSituate();case 2:return stageStance();case 3:return stageIdeas();case 4:return stagePrior();case 5:return stageBuild();case 6:return stageDeploy();case 7:return stageGuard();case 8:return stagePitch()}}let lastScreen="";function screenKey(){return[state.view,state.stage,state.ideaStep,state.priorStep,state.scoreIdx].join("|")}function render(){const root=$("#root");const key=screenKey(),same=key===lastScreen;lastScreen=key;if(state.view==="facilitator"){root.innerHTML=facilitatorView();return}if(state.view==="present"){root.innerHTML=presentView();return}const oldPane=document.querySelector("main");const top=oldPane?oldPane.scrollTop:0;root.innerHTML=`<div class="h-screen flex flex-col">
+  </div>`}const visibleStages=()=>STAGES.filter(s=>!s.hidden);function stageNo(id){return visibleStages().findIndex(s=>s.id===id)+1}function nextStage(id,d){const v=visibleStages();const i=v.findIndex(s=>s.id===id);return(v[i+d]||v[i]).id}function stageIntro(){const st=STAGES[state.stage];return`<div class="fadein">
+    <div class="rounded-2xl border border-line bg-white overflow-hidden">
+      <div class="px-6 md:px-12 py-12 md:py-16 min-h-[420px] flex flex-col justify-center">
+        <div class="text-[12px] font-bold uppercase tracking-[0.14em] text-teal-dark mb-3">Stage ${stageNo(st.id)} · ${st.minutes} minutes</div>
+        <h2 class="text-[40px] md:text-[48px] font-bold text-ink leading-[1.1] mb-8">${st.name}</h2>
+        <div class="grid md:grid-cols-2 max-w-4xl gap-4">
+          <div class="p-6 rounded-xl bg-wash border border-line">
+            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-2">What you will do</div>
+            <div class="text-[17px] font-medium text-ink2 leading-relaxed">${st.doing}</div>
+          </div>
+          <div class="p-6 rounded-xl border-[1.5px] border-teal-dark/40 bg-teal/[0.05]">
+            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-2">Why it matters</div>
+            <div class="text-[17px] font-medium text-ink2 leading-relaxed">${st.why}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>${setNav("go:"+nextStage(state.stage,-1),"intro:"+st.id)}`}function stageBody(){if(state.stage>0&&STAGES[state.stage].doing&&!state.introSeen.includes(state.stage))return stageIntro();switch(state.stage){case 0:return stageBrief();case 1:return stageSituate();case 2:return stageStance();case 3:return stageIdeas();case 4:return stagePrior();case 5:return stageBuild();case 6:return stageDeploy();case 7:return stageGuard();case 8:return stagePitch()}}let lastScreen="";function screenKey(){return[state.view,state.stage,state.briefSlide,state.stanceSlide,state.ideaStep,state.scoreIdx,state.buildStep,state.deployStep,state.introSeen.length,state.ideaStep,state.priorStep,state.scoreIdx].join("|")}function render(){const root=$("#root");const key=screenKey(),same=key===lastScreen;lastScreen=key;if(state.view==="facilitator"){root.innerHTML=facilitatorView();return}if(state.view==="present"){root.innerHTML=presentView();fitPresent();const el=document.querySelector("[data-fit]");if(el&&window.ResizeObserver)new ResizeObserver(()=>fitPresent()).observe(el);setTimeout(fitPresent,200);return}NAV=null;if(state.stage===4&&state.priorStep==="land")syncPriority();const oldPane=document.querySelector("main");const top=oldPane?oldPane.scrollTop:0;root.innerHTML=`<div class="h-screen flex flex-col">
     ${header()}
     <div class="flex-1 flex min-h-0">
       ${rail()}
-      <main class="flex-1 overflow-y-auto"><div class="max-w-[1080px] mx-auto px-8 py-8">${stageBody()}</div></main>
+      <div class="flex-1 flex flex-col min-w-0"><main class="flex-1 overflow-y-auto"><div class="max-w-[1080px] mx-auto px-8 py-8">${stageBody()}</div></main>${navBar()}</div>
     </div>
-    ${constraintsStrip()}
     ${clinicPanel()}
-  </div>`;const pane=document.querySelector("main");if(!pane)return;if(same){pane.querySelectorAll(".fadein, .slidein, .slideback").forEach(el=>el.classList.remove("fadein","slidein","slideback"));pane.scrollTop=top}if(state.scrollTo){const el=document.getElementById(state.scrollTo);if(el)pane.scrollTop+=el.getBoundingClientRect().top-pane.getBoundingClientRect().top-16;state.scrollTo=null}}document.addEventListener("click",e=>{const btn=e.target.closest("[data-act]");if(!btn)return;const[kind,a,b,c]=btn.dataset.act.split(":");switch(kind){case"go":{const t=+a;if(t===3&&state.stage<3){state.ideaStep=0;state.ideaDir="fwd"}fillSkipped(t);state.stage=t;if(t===4&&state.priorStep!=="land"){state.priorStep="score";state.scoreIdx=0}break}case"view":state.view=a;if(a==="present")state.slide=0;break;case"slide":state.slide=Math.max(0,+a);break;case"printpitch":window.print();break;case"tab":state.briefTab=a;if(!state.briefSeen.includes(a))state.briefSeen.push(a);break;case"example":state.example=state.example===a?null:a;break;case"tech":state.showTech=!state.showTech;break;case"clinic":state.clinicOpen=true;break;case"clinicclose":state.clinicOpen=false;break;case"clinicuse":state.clinicTicket="spent";state.clinicTime=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});state.clinicOpen=false;break;case"profile":state.profile=a;state.weights={...byId(STANCES,a).weights};break;case"pstep":if(a==="scoreLast"){state.priorStep="score";state.scoreIdx=Math.max(0,state.shortlist.length-1)}else{state.priorStep=a==="stance"?"score":a;if(a==="score")state.scoreIdx=0;if(a==="land")fillScores()}break;case"sidx":state.priorStep="score";state.scoreIdx=+a;break;case"istep":state.ideaDir=+a>state.ideaStep?"fwd":"back";state.ideaStep=+a;break;case"openstage":state.openStage=a;break;case"checksit":checkSituation();break;case"pickuc":{const u=allCases().find(x=>x.id===a);if(!u)break;if(state.shortlist.includes(a)){state.shortlist=state.shortlist.filter(x=>x!==a)}else{state.shortlist=state.shortlist.filter(id=>{const other=allCases().find(x=>x.id===id);return!other||other.stage!==u.stage});state.shortlist.push(a)}if(state.chosen&&!state.shortlist.includes(state.chosen))state.chosen=null;break}case"briefcheck":state.briefCheck[a]=briefFeedback(pickForStage(a));break;case"suggest":state.ownBeforeSuggestions=state.customCases.filter(c2=>c2.name.trim()).length;state.suggestionsShown=true;break;case"score":state.scores[a]={...state.scores[a]||{},[b]:+c};break;case"choose":state.chosen=state.chosen===a?null:a;break;case"owner":state.owner=decodeURIComponent(a);break;case"scope":state.dataScopes=toggle(state.dataScopes,a);break;case"integ":state.integration=decodeURIComponent(a);break;case"genmap":generateMap();state.libOpen=false;state.buildEdit=false;state.scrollTo="build-step2";break;case"buildedit":state.buildEdit=!state.buildEdit;break;case"verdict":state.mapVerdict=state.mapVerdict===a?null:a;if(state.mapVerdict!=="modify")state.libOpen=false;break;case"delnode":state.mapNodes=state.mapNodes.filter(n=>n.uid!==a);break;case"lib":state.libOpen=true;state.libTab=a;break;case"libtab":state.libTab=a;break;case"libclose":state.libOpen=false;break;case"addnode":if(!state.mapNodes.some(n=>n.nodeId===a)){const rank={input:0,processing:1,output:2};const at=state.mapNodes.findIndex(n=>rank[NODE_MAP[n.nodeId].layer]>rank[NODE_MAP[a].layer]);const node={uid:"n"+Date.now()+"-"+a,nodeId:a};if(at===-1)state.mapNodes.push(node);else state.mapNodes.splice(at,0,node)}break;case"roll":if(b==="none")delete state.rollout[a];else state.rollout[a]=b;break;case"acct":state.accountable=decodeURIComponent(a);break;case"pscope":state.pilotScope=a;break;case"pdur":state.pilotDuration=decodeURIComponent(a);break;case"metric":{const i=state.successMetrics.findIndex(m=>m.id===a);if(i>=0)state.successMetrics.splice(i,1);else if(state.successMetrics.length<2)state.successMetrics.push({id:a,target:""});break}case"risk":{const i=state.risks.findIndex(r=>r.id===a);if(i>=0)state.risks.splice(i,1);else if(state.risks.length<3)state.risks.push({id:a,mitigation:""});break}case"phide":state.pitchHidden=[...state.pitchHidden,a];break;case"pshow":state.pitchHidden=state.pitchHidden.filter(x=>x!==a);break;case"pup":{const i=state.pitchOrder.indexOf(a);if(i>0){const o=[...state.pitchOrder];[o[i-1],o[i]]=[o[i],o[i-1]];state.pitchOrder=o}break}case"pdn":{const i=state.pitchOrder.indexOf(a);if(i<state.pitchOrder.length-1){const o=[...state.pitchOrder];[o[i],o[i+1]]=[o[i+1],o[i]];state.pitchOrder=o}break}}render()});function renderKeepingFocus(){const el=document.activeElement;const id=el&&el.id;const start=el&&el.selectionStart,end=el&&el.selectionEnd;const pane=document.querySelector("main");const top=pane?pane.scrollTop:0;render();const next=id?document.getElementById(id):null;if(next){next.focus({preventScroll:true});if(start!=null&&next.setSelectionRange){try{next.setSelectionRange(start,end)}catch(_){}}}const newPane=document.querySelector("main");if(newPane)newPane.scrollTop=top}document.addEventListener("keydown",e=>{if(state.view!=="present")return;if(e.key==="ArrowRight"||e.key==="PageDown"){state.slide=Math.min(state.slide+1,pitchSlides().length-1);render()}if(e.key==="ArrowLeft"||e.key==="PageUp"){state.slide=Math.max(state.slide-1,0);render()}if(e.key==="Escape"){state.view="app";render()}});document.addEventListener("input",e=>{const el=e.target.closest("[data-in]");if(!el)return;const[kind,key]=el.dataset.in.split(":");const v=el.value;switch(kind){case"tableName":state.tableName=v;break;case"ceoRead":state.ceoRead=v;break;case"stanceWhy":state.stanceWhy=v;break;case"stageWhy":state.stageWhy[key]=v;break;case"pickWhy":state.pickWhy[key]=v;break;case"mapDecline":state.mapDecline=v;break;case"situationStatement":state.situationStatement=v;break;case"custname":state.customCases[+key].name=v;break;case"custdoes":state.customCases[+key].does=v;break;case"custnot":state.customCases[+key].doesNot=v;break;case"weight":state.weights[key]=+v;softRefreshWeights();break;case"rejection":state.rejection=v;break;case"buildNote":state.buildNote=v;break;case"pilotWho":state.pilotWho=v;break;case"killCriterion":state.killCriterion=v;break;case"target":{const m=state.successMetrics.find(x=>x.id===key);if(m)m.target=v;break}case"mit":{const r=state.risks.find(x=>x.id===key);if(r)r.mitigation=v;break}}if(kind!=="weight")renderKeepingFocus()});function softRefreshWeights(){document.querySelectorAll('[data-in^="weight:"]').forEach(el=>{const k=el.dataset.in.split(":")[1];const lbl=el.nextElementSibling;if(lbl)lbl.textContent=state.weights[k]})}document.addEventListener("change",e=>{if(e.target.closest('[data-in^="weight:"]'))render()});document.addEventListener("blur",e=>{const el=e.target.closest?e.target.closest("[data-edit]"):null;if(!el)return;const[kind,key]=el.dataset.edit.split(":");const txt=el.textContent.trim();const PLACEHOLDER="Write your headline here";if(kind==="pitchHeadline")state.pitchHeadline=txt===PLACEHOLDER?"":txt;if(kind==="block")state.pitchEdits[key]=txt;render()},true);setInterval(()=>{if(state.secondsLeft>0)state.secondsLeft--;const c=$("#clock");if(c)c.textContent=fmtTime(state.secondsLeft)},1e3);render();
+  </div>`;const pane=document.querySelector("main");if(!pane)return;if(same){pane.querySelectorAll(".fadein, .slidein, .slideback").forEach(el=>el.classList.remove("fadein","slidein","slideback"));pane.scrollTop=top}if(state.scrollTo){const el=document.getElementById(state.scrollTo);if(el)pane.scrollTop+=el.getBoundingClientRect().top-pane.getBoundingClientRect().top-16;state.scrollTo=null}}document.addEventListener("click",e=>{const btn=e.target.closest("[data-act]");if(!btn)return;const[kind,a,b,c]=btn.dataset.act.split(":");switch(kind){case"go":{let t=+a;if(t>2&&!state.profile){t=2;if(!state.introSeen.includes(2))state.introSeen.push(2);state.stanceSlide=STANCES.length}else if(t>3&&!ideasDone()){t=3;if(!state.introSeen.includes(3))state.introSeen.push(3);state.ideaStep=Math.max(0,focusStages().findIndex(f=>picksForStage(f.id).length!==2))}else if(t>4&&(state.priorStep!=="land"||!state.rejection.trim())){t=4;if(!state.introSeen.includes(4))state.introSeen.push(4);const todo=priorList().findIndex(u=>!isScored(u));if(todo<0)state.priorStep="land";else{state.priorStep="score";state.scoreIdx=todo}}else if(t>5&&!buildDone()){t=5;if(!state.introSeen.includes(5))state.introSeen.push(5);state.buildStep=firstBuildGap()}else if(t>6&&!deployReady(3)){t=6;if(!state.introSeen.includes(6))state.introSeen.push(6);state.deployStep=!deployReady(1)?0:!deployReady(2)?1:2}if(t===3&&state.stage<3){state.ideaStep=0;state.ideaDir="fwd"}fillSkipped(t);state.stage=t;if(t===4&&state.priorStep!=="land"&&+a===4){state.priorStep="score";state.scoreIdx=0}break}case"view":state.view=a;if(a==="present")state.slide=0;break;case"slide":state.slide=Math.max(0,+a);break;case"printpitch":window.print();break;case"unintro":state.introSeen=state.introSeen.filter(x=>x!==+a);break;case"intro":if(!state.introSeen.includes(+a))state.introSeen.push(+a);break;case"sslide":state.stanceSlide=Math.max(0,Math.min(+a,STANCES.length));break;case"bslide":state.briefSlide=Math.max(0,Math.min(+a,briefSlides().length-1));state.briefMax=Math.max(state.briefMax,state.briefSlide);break;case"example":state.example=state.example===a?null:a;break;case"tech":state.showTech=!state.showTech;break;case"clinic":state.clinicOpen=true;break;case"clinicclose":state.clinicOpen=false;break;case"clinicuse":state.clinicTicket="spent";state.clinicTime=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});state.clinicOpen=false;break;case"profile":state.profile=a;state.weights={...byId(STANCES,a).weights};break;case"pstep":if(a==="scoreLast"){state.priorStep="score";state.scoreIdx=Math.max(0,state.shortlist.length-1)}else{state.priorStep=a==="stance"?"score":a;if(a==="score")state.scoreIdx=0;if(a==="land")fillScores()}break;case"mx":state.matrixOpen=state.matrixOpen===a?null:a;break;case"pslide":{const n=priorList().length;if(+a<n){state.priorStep="score";state.scoreIdx=+a}else if(shortlistCases().every(isScored))state.priorStep="land";break}case"sidx":state.priorStep="score";state.scoreIdx=+a;break;case"istep":state.ideaDir=+a>state.ideaStep?"fwd":"back";state.ideaStep=+a;break;case"openstage":state.openStage=a;break;case"checksit":checkSituation();break;case"pick2":{const u=allCases().find(x=>x.id===a);if(!u)break;if(state.shortlist.includes(a))state.shortlist=state.shortlist.filter(x=>x!==a);else if(picksForStage(u.stage).length<2)state.shortlist.push(a);if(state.chosen&&!state.shortlist.includes(state.chosen))state.chosen=null;break}case"pickuc":{const u=allCases().find(x=>x.id===a);if(!u)break;if(state.shortlist.includes(a)){state.shortlist=state.shortlist.filter(x=>x!==a)}else{state.shortlist=state.shortlist.filter(id=>{const other=allCases().find(x=>x.id===id);return!other||other.stage!==u.stage});state.shortlist.push(a)}if(state.chosen&&!state.shortlist.includes(state.chosen))state.chosen=null;break}case"briefcheck":state.briefCheck[a]=briefFeedback(pickForStage(a));break;case"suggest":state.ownBeforeSuggestions=state.customCases.filter(c2=>c2.name.trim()).length;state.suggestionsShown=true;break;case"score":state.scores[a]={...state.scores[a]||{},[b]:+c};break;case"choose":state.chosen=state.chosen===a?null:a;break;case"owner":state.owner=decodeURIComponent(a);break;case"scope":state.dataScopes=toggle(state.dataScopes,a);break;case"integ":state.integration=decodeURIComponent(a);break;case"buildgo":generateMap();state.libOpen=false;state.buildStep=Math.floor(state.buildStep/2)*2+1;break;case"bstep":{const n=+a;const id=buildIds()[Math.floor(n/2)];state.buildStep=n%2===1&&!buildOf(id).mapBuilt?n-1:n;break}case"dstep":if(+a===0||deployReady(+a))state.deployStep=+a;break;case"mvp":{const p=state.pilot[a]=state.pilot[a]||{};const v=decodeURIComponent(c);p[b]=p[b]===v?null:v;const top=state.pilot[buildIds()[0]]||{};state.pilotScope=top.scope||null;state.pilotDuration=top.duration||null;state.successMetrics=buildIds().filter(id=>(state.pilot[id]||{}).measure).map(id=>({id:state.pilot[id].measure,target:""}));break}case"measure":state.successMetrics=state.successMetrics[0]&&state.successMetrics[0].id===a?[]:[{id:a,target:""}];break;case"genmap":generateMap();state.libOpen=false;state.buildEdit=false;state.scrollTo="build-step2";break;case"buildedit":state.buildEdit=!state.buildEdit;break;case"verdict":state.mapVerdict=state.mapVerdict===a?null:a;if(state.mapVerdict!=="modify")state.libOpen=false;break;case"delnode":state.mapNodes=state.mapNodes.filter(n=>n.uid!==a);break;case"lib":state.libOpen=true;state.libTab=a;break;case"libtab":state.libTab=a;break;case"libclose":state.libOpen=false;break;case"addnode":if(!state.mapNodes.some(n=>n.nodeId===a)){const rank={input:0,processing:1,output:2};const def=NODE_MAP[a];let at=state.mapNodes.findIndex(n=>rank[NODE_MAP[n.nodeId].layer]>rank[def.layer]);if(def.layer==="processing"&&!def.human){const h=state.mapNodes.findIndex(n=>NODE_MAP[n.nodeId].human);if(h>=0&&(at===-1||h<at))at=h}const node={uid:"n"+Date.now()+"-"+a,nodeId:a};if(at===-1)state.mapNodes.push(node);else state.mapNodes.splice(at,0,node)}break;case"roll":if(b==="none")delete state.rollout[a];else state.rollout[a]=b;break;case"acct":state.accountable=decodeURIComponent(a);break;case"pscope":state.pilotScope=a;break;case"pdur":state.pilotDuration=decodeURIComponent(a);break;case"metric":{const i=state.successMetrics.findIndex(m=>m.id===a);if(i>=0)state.successMetrics.splice(i,1);else if(state.successMetrics.length<2)state.successMetrics.push({id:a,target:""});break}case"risk":{const i=state.risks.findIndex(r=>r.id===a);if(i>=0)state.risks.splice(i,1);else if(state.risks.length<2)state.risks.push({id:a,mitigation:(byId(RISKS,a)||{}).guard||""});break}case"phide":state.pitchHidden=[...state.pitchHidden,a];break;case"pshow":state.pitchHidden=state.pitchHidden.filter(x=>x!==a);break;case"pup":{const i=state.pitchOrder.indexOf(a);if(i>0){const o=[...state.pitchOrder];[o[i-1],o[i]]=[o[i],o[i-1]];state.pitchOrder=o}break}case"pdn":{const i=state.pitchOrder.indexOf(a);if(i<state.pitchOrder.length-1){const o=[...state.pitchOrder];[o[i],o[i+1]]=[o[i+1],o[i]];state.pitchOrder=o}break}}render()});function renderKeepingFocus(){const el=document.activeElement;const id=el&&el.id;const start=el&&el.selectionStart,end=el&&el.selectionEnd;const pane=document.querySelector("main");const top=pane?pane.scrollTop:0;render();const next=id?document.getElementById(id):null;if(next){next.focus({preventScroll:true});if(start!=null&&next.setSelectionRange){try{next.setSelectionRange(start,end)}catch(_){}}}const newPane=document.querySelector("main");if(newPane)newPane.scrollTop=top}document.addEventListener("keydown",e=>{if(state.view==="app"&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||"")){const d=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0;if(d&&state.stage===0){state.briefSlide=Math.max(0,Math.min(state.briefSlide+d,briefSlides().length-1));state.briefMax=Math.max(state.briefMax,state.briefSlide);render();return}if(d&&state.stage===2&&state.introSeen.includes(2)){state.stanceSlide=Math.max(0,Math.min(state.stanceSlide+d,STANCES.length));render();return}if(d&&state.stage===3&&state.introSeen.includes(3)){state.ideaStep=Math.max(0,Math.min(state.ideaStep+d,focusStages().length-1));render();return}}if(state.view!=="present")return;if(e.key==="ArrowRight"||e.key==="PageDown"){state.slide=Math.min(state.slide+1,pitchSlides().length-1);render()}if(e.key==="ArrowLeft"||e.key==="PageUp"){state.slide=Math.max(state.slide-1,0);render()}if(e.key==="Escape"){state.view="app";render()}});document.addEventListener("input",e=>{const el=e.target.closest("[data-in]");if(!el)return;const[kind,key]=el.dataset.in.split(":");const v=el.value;switch(kind){case"tableName":state.tableName=v;break;case"ceoRead":state.ceoRead=v;break;case"stanceWhy":state.stanceWhy=v;break;case"stageWhy":state.stageWhy[key]=v;break;case"pickWhy":state.pickWhy[key]=v;break;case"mapDecline":state.mapDecline=v;break;case"situationStatement":state.situationStatement=v;break;case"custname":state.customCases[+key].name=v;break;case"custdoes":state.customCases[+key].does=v;break;case"custnot":state.customCases[+key].doesNot=v;break;case"weight":state.weights[key]=+v;softRefreshWeights();break;case"rejection":state.rejection=v;break;case"buildNote":state.buildNote=v;break;case"pilotWho":state.pilotWho=v;break;case"killCriterion":state.killCriterion=v;break;case"target":{const m=state.successMetrics.find(x=>x.id===key);if(m)m.target=v;break}case"mit":{const r=state.risks.find(x=>x.id===key);if(r)r.mitigation=v;break}}if(kind!=="weight")renderKeepingFocus()});function softRefreshWeights(){document.querySelectorAll('[data-in^="weight:"]').forEach(el=>{const k=el.dataset.in.split(":")[1];const lbl=el.nextElementSibling;if(lbl)lbl.textContent=state.weights[k]})}document.addEventListener("change",e=>{if(e.target.closest('[data-in^="weight:"]'))render()});let dragId=null,dragGroup=null;const clearDrop=()=>document.querySelectorAll("[data-drag]").forEach(el=>{el.style.boxShadow="";delete el.dataset.over});document.addEventListener("dragstart",e=>{const el=e.target.closest&&e.target.closest("[data-drag]");if(!el)return;dragId=el.dataset.drag;dragGroup=el.dataset.group||null;e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",dragId);setTimeout(()=>el.classList.add("opacity-40"),0)});document.addEventListener("dragover",e=>{const el=e.target.closest&&e.target.closest("[data-drag]");if(!el||!dragId||(el.dataset.group||null)!==dragGroup)return;e.preventDefault();const r=el.getBoundingClientRect();const across=el.dataset.axis==="x";const pos=across?(e.clientX<r.left+r.width/2?"before":"after"):(e.clientY<r.top+r.height/2?"before":"after");clearDrop();if(el.dataset.drag!==dragId){el.dataset.over=pos;el.style.boxShadow=across?(pos==="before"?"-4px 0 0 #2C9A94":"4px 0 0 #2C9A94"):(pos==="before"?"0 -3px 0 #2C9A94":"0 3px 0 #2C9A94")}});document.addEventListener("drop",e=>{const el=e.target.closest&&e.target.closest("[data-drag]");if(!el||!dragId||(el.dataset.group||null)!==dragGroup)return;e.preventDefault();const target=el.dataset.drag,pos=el.dataset.over;if(target!==dragId&&pos){if(dragGroup){const moving=state.mapNodes.find(n=>n.uid===dragId);const rest=state.mapNodes.filter(n=>n.uid!==dragId);const at=rest.findIndex(n=>n.uid===target)+(pos==="after"?1:0);rest.splice(at,0,moving);state.mapNodes=rest}else{const order=state.priorityOrder.filter(id=>id!==dragId);const at=order.indexOf(target)+(pos==="after"?1:0);order.splice(at,0,dragId);state.priorityOrder=order}}dragId=null;dragGroup=null;render()});document.addEventListener("dragend",()=>{if(dragId){dragId=null;dragGroup=null;render()}});document.addEventListener("blur",e=>{const el=e.target.closest?e.target.closest("[data-edit]"):null;if(!el)return;const[kind,key]=el.dataset.edit.split(":");const txt=el.textContent.trim();const PLACEHOLDER="Write your headline here";if(kind==="pitchHeadline")state.pitchHeadline=txt===PLACEHOLDER?"":txt;if(kind==="block")state.pitchEdits[key]=txt;render()},true);setInterval(()=>{if(state.secondsLeft>0)state.secondsLeft--;const c=$("#clock");if(c)c.textContent=fmtTime(state.secondsLeft)},1e3);render();
 </script>
 </body>
 </html>
