@@ -1,5 +1,6 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
+import { sendPitch } from './functions/src/sendPitch';
 import react from '@vitejs/plugin-react';
 import type { Plugin, Connect } from 'vite';
 import type { IncomingMessage, ServerResponse } from 'http';
@@ -147,6 +148,36 @@ You must respond in the following JSON format ONLY — no markdown, no extra tex
   "steps": "The enhanced Steps & Process section text",
   "quality": "The enhanced Quality Checks section text"
 }`;
+
+function sendPitchPlugin(apiKey: string | undefined): Plugin {
+  return {
+    name: 'send-pitch-proxy',
+    configureServer(server) {
+      server.middlewares.use('/api/send-pitch', (req: Connect.IncomingMessage, res: ServerResponse) => {
+        res.setHeader('Content-Type', 'application/json');
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end(JSON.stringify({ error: 'Method not allowed' }));
+          return;
+        }
+
+        let body = '';
+        req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+        req.on('end', async () => {
+          try {
+            const result = await sendPitch(apiKey, JSON.parse(body));
+            res.statusCode = result.status;
+            res.end(JSON.stringify(result.body));
+          } catch (err) {
+            console.error('send-pitch error:', err);
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: 'The email could not be sent. Try again, or save the PDF instead.' }));
+          }
+        });
+      });
+    },
+  };
+}
 
 function geminiProxyPlugin(apiKey: string, model: string): Plugin {
   return {
@@ -1481,6 +1512,7 @@ export default defineConfig(({ mode }) => {
       dashboardDesignProxyPlugin(env.OpenRouter_API, dashboardModel, geminiModel),
       prdProxyPlugin(env.OpenRouter_API, geminiModel),
       insightAnalysisProxyPlugin(env.OpenRouter_API, geminiModel),
+      sendPitchPlugin(env.RESEND_API_KEY),
     ],
     build: {
       rollupOptions: {

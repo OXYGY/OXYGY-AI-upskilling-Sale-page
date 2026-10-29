@@ -19,6 +19,7 @@
         { "source": "/api/generate-pathway", "function": { "functionId": "generatepathway" } },
         { "source": "/api/design-dashboard", "function": { "functionId": "designdashboard" } },
         { "source": "/api/generate-prd", "function": { "functionId": "generateprd" } },
+        { "source": "/api/send-pitch", "function": { "functionId": "sendpitch" } },
         { "source": "**", "destination": "/index.html" }
       ],
       "headers": [
@@ -61,6 +62,7 @@
         { "source": "/api/generate-pathway", "function": { "functionId": "generatepathway" } },
         { "source": "/api/design-dashboard", "function": { "functionId": "designdashboard" } },
         { "source": "/api/generate-prd", "function": { "functionId": "generateprd" } },
+        { "source": "/api/send-pitch", "function": { "functionId": "sendpitch" } },
         { "source": "**", "destination": "/index.html" }
       ],
       "headers": [
@@ -103,6 +105,7 @@
         { "source": "/api/generate-pathway", "function": { "functionId": "generatepathway" } },
         { "source": "/api/design-dashboard", "function": { "functionId": "designdashboard" } },
         { "source": "/api/generate-prd", "function": { "functionId": "generateprd" } },
+        { "source": "/api/send-pitch", "function": { "functionId": "sendpitch" } },
         { "source": "**", "destination": "/index.html" }
       ],
       "headers": [

@@ -1,6 +1,7 @@
 import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import { callGemini, fetchWithRetry } from "./gemini";
+import { sendPitch } from "./sendPitch";
 
 const openRouterApiKey = defineSecret("OPEN_ROUTER_API");
 
@@ -774,5 +775,34 @@ export const generateprd = onRequest({ secrets: [openRouterApiKey] }, async (req
   } catch (err) {
     console.error("generate-prd error:", err);
     res.status(500).json({ error: "Internal server error", retryable: true });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 11. SEND PITCH CARD (Innovation Sandbox demo)
+// ═══════════════════════════════════════════════════════════════
+
+// Best-effort brake on repeat sends from one address; resets when the instance recycles.
+const recentSends = new Map<string, number[]>();
+function tooManySends(ip: string): boolean {
+  const now = Date.now();
+  const hits = (recentSends.get(ip) || []).filter((t) => now - t < 10 * 60 * 1000);
+  hits.push(now);
+  recentSends.set(ip, hits);
+  return hits.length > 5;
+}
+
+// No secret is bound yet, so this deploys before Resend is set up and replies "not set up" until then.
+// To turn email on: run `firebase functions:secrets:set RESEND_API_KEY`, then change the options below to { secrets: ["RESEND_API_KEY"] }.
+export const sendpitch = onRequest({}, async (req, res) => {
+  if (req.method !== "POST") { res.status(405).json({ error: "Method not allowed" }); return; }
+  if (tooManySends(req.ip || "unknown")) { res.status(429).json({ error: "Too many sends. Wait a few minutes, or save the PDF instead." }); return; }
+
+  try {
+    const result = await sendPitch(process.env.RESEND_API_KEY, req.body);
+    res.status(result.status).json(result.body);
+  } catch (err) {
+    console.error("send-pitch error:", err);
+    res.status(500).json({ error: "The email could not be sent. Try again, or save the PDF instead." });
   }
 });
