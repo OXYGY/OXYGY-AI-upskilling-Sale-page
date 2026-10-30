@@ -180,9 +180,9 @@ function refreshWelcome(){const b=document.querySelector('[data-act="wjoin"]');i
 function welcomeModal(){if(!state.welcome||state.view!=="app")return"";const anim=!state.wShown;state.wShown=true;const field="w-full px-3.5 py-2.5 rounded-xl border-[1.5px] border-line text-[16px] text-ink focus:border-teal-dark focus:outline-none";
   return`<div class="fixed inset-0 z-50 flex items-center justify-center px-5 overflow-y-auto py-6" style="background:rgba(26,32,44,.6)" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
     <div class="w-full max-w-[440px] rounded-2xl bg-white border border-line p-7 ${anim?"fadein":""}">
-      <div class="flex items-center gap-2 mb-3"><span class="w-2.5 h-2.5 rounded-full bg-teal"></span><span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">OXYGY Innovation Sandbox</span></div>
+      <div class="flex items-center gap-2 mb-3"><span class="w-2.5 h-2.5 rounded-full bg-teal"></span><span class="text-[11px] font-bold uppercase tracking-[0.14em] text-teal-dark">Innovation Sandbox</span></div>
       <h2 id="welcome-title" class="text-[24px] font-bold text-ink leading-tight">Welcome</h2>
-      <p class="text-[14px] text-muted leading-relaxed mt-1 mb-5">At an OXYGY event? Enter your table number and the event PIN your facilitator gives you.</p>
+      <p class="text-[14px] text-muted leading-relaxed mt-1 mb-5">At an event? Enter your table number and the event PIN your facilitator gives you.</p>
       <div class="grid grid-cols-[110px_1fr] gap-3 mb-3">
         <div><label for="w-table" class="block text-[13px] font-semibold text-ink2 mb-1.5">Table number</label><input id="w-table" data-in="wTable" value="${esc(state.wTable)}" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="e.g. 4" class="${field}" /></div>
         <div><label for="w-pin" class="block text-[13px] font-semibold text-ink2 mb-1.5">Event PIN</label><input id="w-pin" data-in="wPin" value="${esc(state.wPin)}" autocomplete="off" autocapitalize="characters" maxlength="40" class="${field} uppercase" /></div>
