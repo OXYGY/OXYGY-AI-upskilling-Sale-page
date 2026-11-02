@@ -242,14 +242,14 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
         <div class="text-[12px] font-bold uppercase tracking-[0.12em] text-yeld mb-3">From ${CEO_FOCUS.from}</div>
         <div class="text-[22px] md:text-[24px] font-normal text-ink leading-snug italic">“${CEO_FOCUS.line}”</div>
       </div>
-      <p class="text-[16px] text-muted mt-6 max-w-3xl">Keep this ask in mind as we look at the context NordWeave is working within.</p>`},{section:"Organisation",title:COMPANY.name,body:`<p class="text-[18px] text-ink2 leading-relaxed mb-1">${COMPANY.descriptor}.</p>
+      <p class="text-[16px] text-muted mt-6">Keep this ask in mind as we look at the context NordWeave is working within.</p>`},{section:"Organisation",title:COMPANY.name,body:`<p class="text-[18px] text-ink2 leading-relaxed mb-1">${COMPANY.descriptor}.</p>
       <p class="text-[14px] text-muted mb-7">Headquartered in ${COMPANY.hq}.</p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
         ${COMPANY.facts.map(f=>`<div class="p-5 rounded-xl bg-wash border border-line">
           <div class="text-[30px] font-bold text-ink leading-none">${f.value}</div>
           <div class="text-[14px] font-semibold text-ink2 mt-2">${f.label}</div>
           <div class="text-[12.5px] text-faint mt-0.5">${f.note}</div></div>`).join("")}
-      </div>`},{section:"The process",title:"The performance cycle, end to end",body:`<p class="text-[18px] text-ink2 leading-relaxed mb-6 max-w-3xl">Every NordWeave employee goes through the same seven stages each year. This is where the ${PROCESS.totalHours} hours of manager time per employee go.</p>
+      </div>`},{section:"The process",title:"The performance cycle, end to end",body:`<p class="text-[18px] text-ink2 leading-relaxed mb-6">Every NordWeave employee goes through the same seven stages each year. This is where the ${PROCESS.totalHours} hours of manager time per employee go.</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
         ${PROCESS.stages.map(p=>{const focus=SITUATION_ANSWER.includes(p.id);return`<div class="p-3.5 rounded-xl border ${focus?"border-teal-dark bg-teal/[0.08] ring-1 ring-teal-dark":"border-line bg-white"} flex flex-col">
           <div class="flex items-center justify-between gap-2 mb-2">
@@ -261,7 +261,7 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
           <div class="text-[15px] font-bold tabular-nums mt-1.5 ${focus?"text-teal-dark":"text-ink2"}">${p.hours} h</div>
         </div>`}).join("")}
       </div>
-      <div class="mt-6 p-5 rounded-xl border-[1.5px] border-yeld bg-yel/30 text-[16px] text-ink leading-snug">The CEO has pointed at two of these: ${SITUATION_ANSWER.map(id=>{const f=byId(PROCESS.stages,id);return`<strong class="font-bold">${f.name.toLowerCase()}</strong> (${f.hours} h)`}).join(" and ")}. Together they take <strong class="font-bold">${SITUATION_ANSWER.reduce((a,id)=>a+byId(PROCESS.stages,id).hours,0)} of the ${PROCESS.totalHours} hours</strong>.</div>`},{section:"Pressure",title:"Why now",body:`<p class="text-[20px] font-medium text-ink2 leading-relaxed mb-7 max-w-3xl">${PRESSURE.headline}</p>
+      <div class="mt-6 p-5 rounded-xl border-[1.5px] border-yeld bg-yel/30 text-[16px] text-ink leading-snug">The CEO has pointed at two of these: ${SITUATION_ANSWER.map(id=>{const f=byId(PROCESS.stages,id);return`<strong class="font-bold">${f.name.toLowerCase()}</strong> (${f.hours} h)`}).join(" and ")}. Together they take <strong class="font-bold">${SITUATION_ANSWER.reduce((a,id)=>a+byId(PROCESS.stages,id).hours,0)} of the ${PROCESS.totalHours} hours</strong>.</div>`},{section:"Pressure",title:"Why now",body:`<p class="text-[20px] font-medium text-ink2 leading-relaxed mb-7">${PRESSURE.headline}</p>
       <div class="grid md:grid-cols-3 gap-3">
         ${PRESSURE.points.map(p=>`<div class="p-4 rounded-xl border border-line bg-white">
           <div class="text-[24px] font-bold text-teal-dark leading-none">${p.stat}</div>
@@ -573,7 +573,7 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
         </span>
       </div>
       <div class="text-[22px] font-semibold text-ink2 italic leading-snug mb-5">“${st.creed}”</div>
-      <p class="text-[16px] text-body leading-relaxed mb-6 max-w-3xl">${st.believes}</p>
+      <p class="text-[16px] text-body leading-relaxed mb-6">${st.believes}</p>
       <div class="grid md:grid-cols-2 gap-4">
           <div class="p-4 rounded-xl bg-wash border border-line">
             <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-1">Accepts</div>
@@ -595,7 +595,7 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
       <div class="text-[15px] font-semibold text-ink2 italic leading-snug mb-3">“${st.creed}”</div>
       <div class="mt-auto pt-3 border-t border-line text-[13px] leading-snug"><span class="font-bold text-ink2">Accepts:</span> <span class="text-muted">${st.accepts}</span></div>
     </button>`}function stageStance(){const sel=state.profile?byId(STANCES,state.profile):null;const slides=[...STANCES.map(st=>({label:"Stance "+(STANCES.indexOf(st)+1)+" of "+STANCES.length,body:stanceSlide(st)})),{label:"Your choice",body:`<h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-2">Pick your stance</h3>
-      <p class="text-[15px] text-muted mb-6 max-w-3xl">The same evidence supports all three. What differs is what you are willing to trade.</p>
+      <p class="text-[15px] text-muted mb-6">The same evidence supports all three. What differs is what you are willing to trade.</p>
       <div class="grid lg:grid-cols-3 gap-4 items-stretch mb-6">${STANCES.map(stancePickCard).join("")}</div>
       <label for="stanceWhy" class="block text-[14px] font-bold ${sel?"text-ink":"text-faint"} mb-1.5">${sel?`You picked ${esc(sel.name)}. Why that one, for this company? <span class="text-peachd" aria-label="required">*</span>`:"Pick a stance above, then say why you chose it."}</label>
       <div class="text-[12.5px] text-faint mb-2.5">Required. There is no wrong answer here. The reasoning is the point, and it goes on your pitch card.</div>
@@ -698,8 +698,8 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
           <span class="text-[12.5px] font-semibold ${complete?"text-teal-dark":"text-faint"}">${complete?"✓ Rated":CRITERIA.filter(c=>sc[c.id]).length+" of "+CRITERIA.length+" rated"}</span>
         </div>
         <h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-2">${esc(u.name||"Untitled use case")}</h3>
-        <p class="text-[16px] text-body leading-relaxed mb-1 max-w-3xl">${esc(u.does||"")}</p>
-        <p class="text-[14px] text-muted leading-relaxed mb-4 max-w-3xl min-h-[22px]">${u.doesNot?`<span class="font-semibold text-ink2">Does not:</span> ${esc(u.doesNot.replace(/^Does not /,""))}`:""}</p>
+        <p class="text-[16px] text-body leading-relaxed mb-1">${esc(u.does||"")}</p>
+        <p class="text-[14px] text-muted leading-relaxed mb-4 min-h-[22px]">${u.doesNot?`<span class="font-semibold text-ink2">Does not:</span> ${esc(u.doesNot.replace(/^Does not /,""))}`:""}</p>
         <div class="mb-5">${problemBox(u.stage)}</div>
         <div class="grid md:grid-cols-2 gap-4">
           ${CRITERIA.map(c=>{const lens=st&&(c.id==="impact"?st.lensImpact:st.lensFeasibility);const v=sc[c.id];return`<div class="flex flex-col p-5 rounded-2xl border-[1.5px] ${v?"border-teal-dark/60 bg-teal/[0.04]":"border-line bg-wash"}">
@@ -1130,7 +1130,7 @@ function pitchCardInner(blocks,forPrint){return`<div class="p-6">
       <div class="px-6 md:px-12 py-12 md:py-16 min-h-[420px] flex flex-col justify-center">
         <div class="text-[12px] font-bold uppercase tracking-[0.14em] text-teal-dark mb-3">Stage ${stageNo(st.id)} · ${st.minutes} minutes</div>
         <h2 class="text-[40px] md:text-[48px] font-bold text-ink leading-[1.1] mb-8">${st.name}</h2>
-        <div class="grid md:grid-cols-2 max-w-4xl gap-4">
+        <div class="grid md:grid-cols-2 gap-4">
           <div class="p-6 rounded-xl bg-wash border border-line">
             <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-2">What you will do</div>
             <div class="text-[17px] font-medium text-ink2 leading-relaxed">${st.doing}</div>
