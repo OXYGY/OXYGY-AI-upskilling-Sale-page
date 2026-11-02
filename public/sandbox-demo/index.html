@@ -249,11 +249,6 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
           <div class="text-[30px] font-bold text-ink leading-none">${f.value}</div>
           <div class="text-[14px] font-semibold text-ink2 mt-2">${f.label}</div>
           <div class="text-[12.5px] text-faint mt-0.5">${f.note}</div></div>`).join("")}
-      </div>`},{section:"Pressure",title:"Why now",body:`<p class="text-[20px] font-medium text-ink2 leading-relaxed mb-7 max-w-3xl">${PRESSURE.headline}</p>
-      <div class="grid md:grid-cols-3 gap-3">
-        ${PRESSURE.points.map(p=>`<div class="p-4 rounded-xl border border-line bg-white">
-          <div class="text-[24px] font-bold text-teal-dark leading-none">${p.stat}</div>
-          <div class="text-[13px] font-semibold text-ink2 mt-2 leading-snug">${p.label}</div></div>`).join("")}
       </div>`},{section:"The process",title:"The performance cycle, end to end",body:`<p class="text-[18px] text-ink2 leading-relaxed mb-6 max-w-3xl">Every NordWeave employee goes through the same seven stages each year. This is where the ${PROCESS.totalHours} hours of manager time per employee go.</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
         ${PROCESS.stages.map(p=>{const focus=SITUATION_ANSWER.includes(p.id);return`<div class="p-3.5 rounded-xl border ${focus?"border-teal-dark bg-teal/[0.08] ring-1 ring-teal-dark":"border-line bg-white"} flex flex-col">
@@ -266,7 +261,12 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
           <div class="text-[15px] font-bold tabular-nums mt-1.5 ${focus?"text-teal-dark":"text-ink2"}">${p.hours} h</div>
         </div>`}).join("")}
       </div>
-      <div class="mt-6 p-5 rounded-xl border-[1.5px] border-yeld bg-yel/30 text-[16px] text-ink leading-snug">The CEO has pointed at two of these: ${SITUATION_ANSWER.map(id=>{const f=byId(PROCESS.stages,id);return`<strong class="font-bold">${f.name.toLowerCase()}</strong> (${f.hours} h)`}).join(" and ")}. Together they take <strong class="font-bold">${SITUATION_ANSWER.reduce((a,id)=>a+byId(PROCESS.stages,id).hours,0)} of the ${PROCESS.totalHours} hours</strong>.</div>`},{section:"Organisation",title:"Current AI use",body:`<div class="grid md:grid-cols-3 gap-4">
+      <div class="mt-6 p-5 rounded-xl border-[1.5px] border-yeld bg-yel/30 text-[16px] text-ink leading-snug">The CEO has pointed at two of these: ${SITUATION_ANSWER.map(id=>{const f=byId(PROCESS.stages,id);return`<strong class="font-bold">${f.name.toLowerCase()}</strong> (${f.hours} h)`}).join(" and ")}. Together they take <strong class="font-bold">${SITUATION_ANSWER.reduce((a,id)=>a+byId(PROCESS.stages,id).hours,0)} of the ${PROCESS.totalHours} hours</strong>.</div>`},{section:"Pressure",title:"Why now",body:`<p class="text-[20px] font-medium text-ink2 leading-relaxed mb-7 max-w-3xl">${PRESSURE.headline}</p>
+      <div class="grid md:grid-cols-3 gap-3">
+        ${PRESSURE.points.map(p=>`<div class="p-4 rounded-xl border border-line bg-white">
+          <div class="text-[24px] font-bold text-teal-dark leading-none">${p.stat}</div>
+          <div class="text-[13px] font-semibold text-ink2 mt-2 leading-snug">${p.label}</div></div>`).join("")}
+      </div>`},{section:"Organisation",title:"Current AI use",body:`<div class="grid md:grid-cols-3 gap-4">
         ${COMPANY.aiUse.map(g=>`<div class="p-6 rounded-xl bg-wash border border-line text-[18px] font-semibold text-ink2 leading-snug">${g}</div>`).join("")}
       </div>`},{section:"Voices",title:"What people say",body:`      <div class="grid md:grid-cols-2 gap-4">
         ${voices.map((v,i)=>`<div class="p-5 rounded-xl border border-line bg-white ${voices.length%2&&i===voices.length-1?"md:col-span-2":""}">
