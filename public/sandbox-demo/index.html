@@ -740,8 +740,8 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
                   <div class="p-3 flex items-end justify-end"><span class="text-[10.5px] font-bold uppercase tracking-wider text-faint" data-q>Quick wins</span></div>
                 </div>
                 <div class="absolute top-[64px] bottom-[60px] left-[38px] right-[38px]">
-                  ${(()=>{const pos=matrixPositions(list);return list.map(u=>{const on=state.forward.includes(u.id);const p=pos[u.id];const rank=state.priorityOrder.indexOf(u.id)+1;return`<div class="absolute -translate-x-1/2 translate-y-1/2" style="left:${p.x}%;bottom:${p.y}%">
-                    <span title="${esc(u.name||"Untitled")}" class="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold text-white shadow-sm ${on?"ring-4 ring-offset-2 ring-offset-wash":""}" style="background:${ucColor(u.id)};${on?"--tw-ring-color:"+ucColor(u.id)+"55":""}">${rank}</span>
+                  ${(()=>{const pos=matrixPositions(list);return list.map(u=>{const on=state.forward.includes(u.id);const p=pos[u.id];return`<div class="absolute -translate-x-1/2 translate-y-1/2" style="left:${p.x}%;bottom:${p.y}%">
+                    <span title="${esc(u.name||"Untitled")}" class="block w-7 h-7 rounded-full shadow-sm ${on?"ring-4 ring-offset-2 ring-offset-wash":""}" style="background:${ucColor(u.id)};${on?"--tw-ring-color:"+ucColor(u.id)+"55":""}"></span>
                   </div>`}).join("")})()}
                 </div>
               </div>
@@ -752,7 +752,7 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
             <div class="text-[14px] font-bold text-ink mb-3">Your priority order</div>
             <div class="space-y-2 mb-5">
               ${ranked.map((u,i)=>{const t=tone(u.stage);const on=i<2;const sc=state.scores[u.id];return`${i===0?'<div class="text-[11px] font-bold uppercase tracking-[0.12em] text-teal-dark mb-1.5">Taking forward</div>':""}${i===2?'<div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint pt-3 mb-1.5 border-t border-dashed border-line">Not this time</div>':""}<div draggable="true" data-drag="${u.id}" class="flex items-center gap-3 p-3.5 rounded-xl border cursor-grab active:cursor-grabbing select-none transition-shadow ${on?"border-teal-dark bg-teal/[0.06] ring-1 ring-teal-dark":"border-line bg-white hover:border-faint"}">
-                <span class="w-7 h-7 shrink-0 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style="background:${ucColor(u.id)}">${i+1}</span>
+                <span class="w-5 h-5 shrink-0 rounded-full" style="background:${ucColor(u.id)}"></span>
                 <span class="flex-1 min-w-0">
                   <span class="block text-[14px] font-semibold text-ink leading-snug">${esc(u.name||"Untitled")}</span>
                   <span class="block text-[11.5px] text-faint">Impact ${fmtScore(sc.impact)} · Feasibility ${fmtScore(sc.feasibility)}</span>
