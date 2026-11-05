@@ -584,7 +584,7 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
             <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-faint mb-1">Blind spot</div>
             <div class="text-[14.5px] text-ink2 leading-snug">${st.blindSpot}</div>
           </div>
-      </div>`}function stancePickCard(st){const on=state.profile===st.id;const t=STANCE_TONE[st.tone]||STANCE_TONE.teal;return`<button data-act="profile:${st.id}" class="text-left h-full flex flex-col p-5 rounded-2xl border-[1.5px] transition-all ${on?t.line+" ring-1 "+t.soft:"border-line bg-white hover:"+t.line}">
+      </div>`}function stancePickCard(st){const on=state.profile===st.id;const t=STANCE_TONE[st.tone]||STANCE_TONE.teal;return`<button data-act="profile:${st.id}" class="text-left h-full flex flex-col lg:grid lg:[grid-template-rows:subgrid] lg:row-span-3 lg:gap-y-0 p-5 rounded-2xl border-[1.5px] transition-all ${on?t.line+" ring-1 "+t.soft:"border-line bg-white hover:"+t.line}">
       <div class="flex items-center gap-3 mb-3">
         <span class="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${on?t.chip:"bg-wash2"}">${icon(st.icon,20,on?"#FFFFFF":t.hex)}</span>
         <span class="flex-1 min-w-0">
@@ -594,7 +594,7 @@ function header(){const t=state.clinicTicket==="available";if(EMBED)return`<head
         <span class="w-5 h-5 shrink-0 rounded-full border-2 flex items-center justify-center ${on?t.line+" "+t.chip:"border-faint"}">${on?'<span class="w-1.5 h-1.5 rounded-full bg-white"></span>':""}</span>
       </div>
       <div class="text-[15px] font-semibold text-ink2 italic leading-snug mb-3">“${st.creed}”</div>
-      <div class="mt-auto pt-3 border-t border-line text-[13px] leading-snug"><span class="font-bold text-ink2">Accepts:</span> <span class="text-muted">${st.accepts}</span></div>
+      <div class="mt-auto lg:mt-0 pt-3 border-t border-line text-[13px] leading-snug"><span class="font-bold text-ink2">Accepts:</span> <span class="text-muted">${st.accepts}</span></div>
     </button>`}function stageStance(){const sel=state.profile?byId(STANCES,state.profile):null;const slides=[...STANCES.map(st=>({label:"Stance "+(STANCES.indexOf(st)+1)+" of "+STANCES.length,body:stanceSlide(st)})),{label:"Your choice",body:`<h3 class="text-[28px] md:text-[32px] font-bold text-ink leading-tight mb-2">Pick your stance</h3>
       <p class="text-[15px] text-muted mb-6">The same evidence supports all three. What differs is what you are willing to trade.</p>
       <div class="grid lg:grid-cols-3 gap-4 items-stretch mb-6">${STANCES.map(stancePickCard).join("")}</div>
